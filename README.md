@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/eureka-twelve/techbookfest4.svg?style=svg)](https://circleci.com/gh/eureka-twelve/techbookfest4)
+
 # Re:VIEW Template
 
 このリポジトリはRe:VIEW用の書籍テンプレートです。
