@@ -54,7 +54,9 @@ Commandは外部とのやり取りを表します。APIへのリクエストを�
 
 これを図にしてみると以下のようになります。
 
-//image[mvu.001][Model-View-Update]
+//image[mvu][Model-View-Update]{
+    画像
+//}
 
 
 == 実装してみよう
