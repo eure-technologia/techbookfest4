@@ -4,6 +4,7 @@ PREDEF:
 CHAPS:
   - article.re
   - satoshin21_swift-nio.re
+  - boxp_clojure.re
 
 APPENDIX:
 
