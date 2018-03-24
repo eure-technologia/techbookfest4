@@ -1,5 +1,5 @@
 
-= Web素人のHaskell+Elmひとりたび
+= Elmさわってみた
 
 
 Webとモバイルアプリだったらどちらかというとモバイルアプリのほうがよく書いているなーという筆者が、ちょろっとElmに入門してみました。
@@ -129,7 +129,7 @@ view model = case model of
 
 実際のViewはこのようにHTMLに変換できる形式で記述します。
 //emlist[][]{
-    mainPage : Page -> Html Msg
+mainPage : Page -> Html Msg
 mainPage page = pageWrapper <| div [ class "main-card"
                        , css
                          [ display inlineBlock
@@ -156,7 +156,7 @@ mainPage page = pageWrapper <| div [ class "main-card"
                            ]
                          ]
                          [
-                           img [ src "https://storage.googleapis.com/mstdn-haru2036/accounts/avatars/000/000/001/original/baa74aa0b028b0a7.jpg"
+                           img [ src "https://storage.googleapis.com/..."
                          , css [
                                  borderRadius (pct 50)
                                , height (pct 100)
@@ -196,10 +196,15 @@ main =
 //}
 
 
-Html.programにはinit, view, update, subscriptionsという4つの引数が渡されています。１つずつ見ていきましょう。@<tt>{init}は、初期状態を表すModelです。
+@<tt>{Html.program}には@<tt>{init}, @<tt>{view}, @<tt>{update}, @<tt>{subscriptions}という4つの引数が渡されています。１つずつ見ていきましょう。@<tt>{init}は、初期状態を表すModelです。
+
+== おわりに
+この記事では、Elmアプリケーションの流れを一通り追ってみました。これがElm Architectureの基本的なところを理解する取っ掛かりになると幸いです
 
 == 参考文献
-https://matsubara0507.github.io/posts/2017-12-13-elm-and-haskell-for-elmer.htmlhttps://guide.elm-lang.org/architecture/
+https://matsubara0507.github.io/posts/2017-12-13-elm-and-haskell-for-elmer.html
+
+https://guide.elm-lang.org/architecture/
 
 
 == 思ったこと
