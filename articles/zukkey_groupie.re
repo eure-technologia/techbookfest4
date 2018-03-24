@@ -1,4 +1,5 @@
 = Groupie実践入門
+== はじめに
 こんにちは、初めまして。
 株式会社エウレカにてPairsJPのAndroidの開発を行っている@<href>{https://twitter.com/zukkey59, @zukkey}です。
 今回は、Android開発で複雑なレイアウトを組むときのRecyclerViewをよしなにやってくれるライブラリのGroupieについてご紹介いたします。
@@ -61,7 +62,7 @@ At the item level, it abstracts the boilerplate of item view types, item layouts
 DataBindingを使用する場合と、使用しない場合によって異なるため分けて説明していきます。　　
 
 ==== DataBindingを使用しない場合
-この節では、DataBindingを使用しない場合について話していきます。@<br>{}
+この節では、DataBindingを@<em>{使用しない}場合について話していきます。@<br>{}
 DataBindingを使用しない場合は、次の2行をappのgradleの中に記述を加えてください。
 
 //emlist[][]{
@@ -73,7 +74,7 @@ DataBindingを使用しない場合は、次の2行をappのgradleの中に記�
 DataBindingを使用しない場合はこれで完了です。
 
 ==== DataBindingを使用する場合
-この節では、DataBindingを使用する場合について話していきます。@<br>{}
+この節では、DataBindingを@<em>{使用する}場合について話していきます。@<br>{}
 DataBindingを使用する場合は、次の2行をappのgradleの中のdependenciesに記述を加えてください。
 
 //emlist[][]{
@@ -101,3 +102,28 @@ DataBindingを使用する場合は、次の2行をappのgradleの中のdependen
 //}
 
 これで、DataBindingに対応したGroupieの導入が完了しました。
+
+== Groupieを用いてサンプルを作成してみよう
+今回は、簡単なHeaderの付いたRecyclerViewを実装していきます。
+
+また、比較するためにGroupieを使う場合と使わない場合を実装してみていきます。
+
+サンプルコードのリポジトリはこちらになります。
+
+実際に作成したサンプルは次のとおりです。
+TODO: 画像追加する
+
+=== Header付きRecyclerViewをGroupieを用いずに作成する
+ * Headerを作成する
+ * 中身を作成する
+
+=== Header付きRecyclerViewをGroupieを用いて作成する
+
+== Groupieを使うことのメリットとデメリット
+=== Groupieを使うことのメリット
+
+=== Groupieを使うことのデメリット
+
+== おわりに
+今回は、Groupieの導入からサンプルを基にGroupieのライブラリに触って得られた知見の紹介でした。
+@<href>{http://rozkey.hatenablog.com/, zukkeyの技術奮闘記}という個人ブログもやっておりますので、よかったら見にきてください。
