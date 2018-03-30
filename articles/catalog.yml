@@ -4,6 +4,10 @@ PREDEF:
 CHAPS:
   - article.re
   - satoshin21_swift-nio.re
+  - haru2036_elm.re
+  - boxp_clojure.re
+  - zukkey_groupie.re
+  - yu81_numeric_calculation_in_go.re
 
 APPENDIX:
 
