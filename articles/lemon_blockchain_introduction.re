@@ -1,5 +1,5 @@
 = 分散技術とこれから
-== 1. 分散の時代
+== 分散の時代
 
 フリーランスで働く人が増えています。
 フリマアプリをつかったり、仮想通貨の売買とかもよく聞くようになりました。
@@ -19,7 +19,7 @@
 
 章を通じてComposerの生成されるサンプルを使って感触を感じてもらえたら嬉しいです。
 
-== 2. ブロックチェーン
+== ブロックチェーン
 
 最近、仮想通貨の話がよく聞こえるようになってきたものの
 その裏側にあるブロックチェーンの技術ははさほど話題になっていない印象を受けます。
@@ -68,9 +68,9 @@
 
 この情報を受け取ったらブロックに書き込んで整合性を確認し、他の台帳にコンセンサス待ちのところへ送ります。
 
-== 3. Hyperledger Fabric
+== Hyperledger Fabric
 
-=== 3.1 仮想通貨に依存しないブロックチェーン
+=== 仮想通貨に依存しないブロックチェーン
 ブロックチェーンの大半は仮想通貨の裏で動くインフラのような立ち位置としてあり、そこを利用してアプリケーションを開発するようなものも多いです。
 
 それに対して、オープンソースのブロックチェーン基盤を世界的に使おうという流れがあります。
@@ -107,7 +107,7 @@ HyperledgerFabricでは、スマートコントラクトを「チェーンコー
 
 今回はそれを使ってスマートコントラクトの開発、並びにクライアントの開発を行っていきましょう。　
 
-=== 3.2.1 環境構築（Node）
+=== 環境構築（Node）
 Hyperledger FabricとHyperledger Composerの両方を構築し、簡単にプレイグランドで遊ぶところから始めましょう。
 対象は*Mac OS*としています。
 
@@ -156,14 +156,14 @@ node --version
 //}
 を叩いてみてください。
 
-=== 3.2.2 環境構築（Docker）
+=== 環境構築（Docker）
 Hyperledgerの環境にはDockerが必要です。
 
 @<href>{https://docs.docker.com/docker-for-mac/install/=download-docker-for-mac, "Install Docker for Mac | Docker Documentation"}
 
 よりDockerをダウンロードしてインストールしておいてください。
 
-=== 3.2.3 環境構築（VSCode）
+=== 環境構築（VSCode）
 推奨エディタとしてVisual Studio Codeをあげていますので
 
 
@@ -173,7 +173,7 @@ Hyperledgerの環境にはDockerが必要です。
 加えて、Visual Studio Codeには、Hyperledger Composer用の拡張機能が提供されています。
 左の拡張機能ボタンより`Hyperledger Composer Extension`で検索してインストールしておきましょう。
 
-=== 3.2.4 Hyperledger Composerの環境構築
+=== Hyperledger Composerの環境構築
 まずはComposerのCLIを入れましょう
 //cmd{
 npm install -g composer-cli
@@ -199,7 +199,7 @@ Composerのファイルはこちらで以上です。次項でPlaygroundを扱�
 npm install -g composer-playground
 //}
 
-=== 3.2.5 Hyperledger Fabricの開発環境構築
+=== Hyperledger Fabricの開発環境構築
 Composerのデプロイ先であるブロックチェーン環境の構築も行います
 //cmd{
   mkdir ~/fabric-tools && cd ~/fabric-tools
@@ -219,8 +219,8 @@ cd ~/fabric-tools
  ./createPeerAdminCard.sh
 //}
 
-== 4 Hyperledger Composer
-=== 4.1 Hyperledger Composer Playground
+== Hyperledger Composer
+=== Hyperledger Composer Playground
 Hyperledger ComposerをCloneしてみたら、早速 Playgroundで遊んでみましょう。
 ComposerのPlaygroundを立ち上げるには、
 //cmd{
@@ -248,7 +248,7 @@ Business Network Archiveファイルは、上の図のように四つのファ�
 
 Composer では、この四種のファイルを編集し、アプリケーションの開発を行っていきます。
 
-=== 4.2 Playgroundで遊ぶ
+=== Playgroundで遊ぶ
 Playgroundで遊ぶために、tutorialのblockchainを作成してデプロイしてみましょう。
 //cmd{
 yo hyperledger-composer:businessnetwork
@@ -388,7 +388,7 @@ SampleAssetsについても同様に作成しましょう。
 
 このようにモデルと、ロジックは基本的なつなぎこみさえできていればブラウザ内で完結できるのも魅力的ですね。
 
-=== 4.2 Playgroundの先へ
+=== Playgroundの先へ
 実際にWebアプリケーションやネイティブから実行するためには、Transaction処理をAPIから処理できなければなりません
 
 ComposerにはモデルファイルからRest APIを自動生成する便利な機能があります。
@@ -424,8 +424,8 @@ Curlコマンドでの実行方法も表示されるのでterminalから
 実行し、同じ結果が返ってきてるか確認してみましょう。
 
 
-== 6. これから起こること
-=== 6.1 感謝
+== これから起こること
+=== 感謝
 お疲れ様でした。今回は、ほんの少しだけチュートリアルを進める程度に解説を抑えました。
 
 将来的にはがっつりビジネスロジックを含めたアプリケーション実装をやってみたいものです。
@@ -443,7 +443,7 @@ Composerは非常におすすめでした。
 
 これは筆者として書いてはいけないことですが、時間があれば丸っと大きいなプロジェクトの開発をテキストに落としたかったと悔しい思いをするところです。
 
-=== 6.2 これから
+=== これから
 ブロックチェーンは2章で話した通り、だれかが台帳を失ってもすぐに取り戻すことができる技術です。分散管理しているからですね。
 
 分散して管理できるということは、個人的には二つの価値のイノベーションがおこると思っています。
