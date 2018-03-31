@@ -423,6 +423,54 @@ Try it out!で実際にその場でAPIを実行することもできます
 Curlコマンドでの実行方法も表示されるのでterminalから
 実行し、同じ結果が返ってきてるか確認してみましょう。
 
+== アプリケーションクライアントを実装してみよう
+Rest APIができたので、簡易的なフロントを作成してみましょう。今回はVuejsを使います。
+
+=== Vue
+Vue.jsは速度、軽量性、コンポーネント思考を兼ね備えた非常に優れたWebフレームワークです。
+//image[7D0724FE-9B9B-4655-B62E-E17815552BFC][Vue]{
+//}
+
+プロジェクトのテンプレート生成には`vue-cli`というのがあるのでそれを利用します。
+
+Npmでインストールしましょう
+//cmd{
+npm install -g @vue/cli
+# yarnユーザーは下のコマンドを叩いてください
+yarn global add @vue/cli
+//}
+
+インストールが終わったらプロジェクトを作ります
+//cmd{
+vue init webpack composer-app
+
+? Project name composer-app
+? Project description A Vue.js project
+? Author XXXXXXX
+? Vue build standalone
+? Install vue-router? No
+? Use ESLint to lint your code? No
+? Set up unit tests No
+? Setup e2e tests with Nightwatch? No
+? Should we run `npm install` for you after the project has been created? (recommended) npm
+
+cd composer-app
+npm run dev
+//}
+
+プロジェクトテンプレートが作成され、実行されました。
+指定アドレスをブラウザで開くと次のような画面が表示されます。
+
+//image[vue_template][Vue]{
+  //}
+
+HttpClientにはAxiosを使いますので追加しましょう
+`npm install —save axis`
+
+エディターで作成されたファイルを編集します。
+Vuejsでは、.`vue`ファイルの編集を通してコンポーネントの開発を進めていきます。
+サンプルで生成されたComposerのAPIを使ってAssetsの取得と更新を行える画面の実装をやってみましょう。
+
 
 == これから起こること
 === 感謝
