@@ -1,17 +1,17 @@
 
-= Elmさわってみた
+= ElmでWebフロント入門
 
 
 Webとモバイルアプリだったらどちらかというとモバイルアプリのほうがよく書いているなーという筆者が、ちょろっとElmに入門してみました。
 この記事では、Elmの特徴的な部分であるThe Elm Architectureについて解説します。
 
 
+今回は、サーバへHTTPリクエストを送り、帰ってきた値を適切なViewに当てはめて表示する簡単なWebページを作ってみたいと思います。初期状態から始まり、リクエストを送信し、帰ってきた値をViewにレンダリングするところまでの一通りの動作を実装してみました。
 
 
-今回は、サーバへHTTPリクエストを送り、帰ってきた値を適切なViewに当てはめて表示する簡単なWebページを作ってみたいと思います。初期状態から始まり、リクエストを送信し、帰ってきた値をViewにレンダリングするところまでの一通りの動作が実装できます。
+基本的に、サーバサイドとフロントエンドはJSONでやり取りすることによって完結するようにしました。
 
 
-基本的に、サーバサイドとフロントエンドはJSONでやり取りすることによって完結するように作ります。
 
 ==  The Elm Architecture
 ElmはもともとFRP(Functional Reactive Programming)と呼ばれるパラダイムで記述するプログラミング言語でしたが、現在はよりシンプルなElm Architectureという設計パターンに沿って開発していく言語になっています。
@@ -58,6 +58,7 @@ Commandは外部とのやり取りを表します。APIへのリクエストを�
     画像
 //}
 
+このように、Model, View, Updateが順番に呼び出されループするような構成になっています。
 
 == 実装してみよう
 
@@ -77,9 +78,8 @@ Commandは外部とのやり取りを表します。APIへのリクエストを�
 
 まず、アプリケーションの状態であるModelを定義していきます。今回は以下の２つの状態を持つアプリケーションとします。
 
-* 取得されたページの内容を表示している状態
-
-* ページの読み込み中の状態
+ * 取得されたページの内容を表示している状態
+ * ページの読み込み中の状態
 
 
 //emlist[][]{
@@ -111,7 +111,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update message model = case message of
     LoadMainPage (Ok result) -> (MainPage result, Cmd.none)
     _ -> (initialModel, Cmd.none)
-}
+//}
 
 
 上記のupdateの処理によりModelが更新され、その更新がViewによってレンダリングされることにより、ユーザの目にAPIから取得してきたPageの内容が表示されました。
@@ -123,7 +123,7 @@ view : Model -> Html Msg
 view model = case model of
   MainPage page -> mainPage page
   LoadingPage -> loadingPage
-}
+//}
 
 今回は、ページが表示された状態とページが読み込み中の状態それぞれに別の画面を表示したかったのでそれを切り分けるようにしています。
 
@@ -196,18 +196,12 @@ main =
 //}
 
 
-@<tt>{Html.program}には@<tt>{init}, @<tt>{view}, @<tt>{update}, @<tt>{subscriptions}という4つの引数が渡されています。１つずつ見ていきましょう。@<tt>{init}は、初期状態を表すModelです。
+@<tt>{Html.program}には@<tt>{init}, @<tt>{view}, @<tt>{update}, @<tt>{subscriptions}という4つの引数が渡されています。１つずつ見ていきましょう。
 
 == おわりに
-この記事では、Elmアプリケーションの流れを一通り追ってみました。これがElm Architectureの基本的なところを理解する取っ掛かりになると幸いです
+この記事では、Elmアプリケーションの流れを一通り追ってみました。この記事でElmに興味を持った方へは、公式サイト(http://elm-lang.org/)のサンプルコードを読んでみることをおすすめします。
 
 == 参考文献
 https://matsubara0507.github.io/posts/2017-12-13-elm-and-haskell-for-elmer.html
 
 https://guide.elm-lang.org/architecture/
-
-
-== 思ったこと
-
- * hpackなるものを知らなかった、これ便利そう
- * Update、実のところはModelを更新じゃなくて現在のModelを元に新しいModelを作るなんだけど、その説明いるかな
