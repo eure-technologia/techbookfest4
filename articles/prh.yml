@@ -8,6 +8,8 @@ imports:
   - ../prh-rules/media/techbooster.yml
 
 rules:
+  - expected: ProGuard
+    pattern: /(Proguard|proguard)/
   - expected: asm.js
     pattern:  ams.js
   - expected: 本章
