@@ -47,10 +47,9 @@ HTTP上の対話モデルをアーキテクチャとして定義しているに�
 # 8-3.GraphQLとは何か
 
 
-# 8-4.GraphQL実装例
+# 8-4.解決方法としてのGraphQL
 
-# 8-5.Protocol Bufferとは何か
 
-# 8-6.Protocol Buffer実装例
+# 8-4.Protocol Bufferの活用ポイント
 
-# 8-7.おわりに
+# 8-5.プロダクトに組み込むためには(実例)
