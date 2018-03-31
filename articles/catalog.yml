@@ -10,7 +10,7 @@ CHAPS:
   - proguard-for-android.re
 #@# TODO: add lemon's re
 #@# TODO: add takochuu's re
-#@# TODO: add yuyakaido's re
+  - yuyakaido-redux-on-android.re
 #@# TODO: add marine's re
 
 APPENDIX:
