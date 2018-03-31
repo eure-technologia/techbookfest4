@@ -27,28 +27,28 @@ T.B.D
 === 複素数
 簡単に複素数の復習をしておきましょう。まず、普通の数は2乗すると必ず正の値になりますが、そうならない数を定義します。すなわち、
 
-//quote{
-ここに虚数単位の定義を入れる。
-i^{2} = -1
-=> i = \sqrt(-1)
+//texequation{
+i^{2} = -1 \\
+//}
+//texequation{
+\Rightarrow i = \sqrt(-1) (正の平方根を採用)
 //}
 
 を満たす @<b>{i} を虚数単位として定義します。
 
 実数 a, b を用いて、複素数 @<b>{z} は次のように書けます。
 
-//quote{
-ここに複素数の定義を入れる。
-(z = a + bi), (a, b ∈ \mathbb{R})
+
+//texequation{
+  z = a + bi
 //}
 
 aを実部、bを虚部と呼びます。
 
 また、実部と虚部をそれぞれ2次元の平面の横軸と縦軸にプロットした複素平面を定義し、その原点からの距離と原点から引いた線分とのなす角度を用いて表すこともあります。次のように書けます。
 
-//quote{
-ここに複素数の極形式の定義を入れる。
-(z = r(cos(θ)+i*sin(θ)), (r, θ ∈ \mathbb{R})
+//texequation{
+z = r(\cos(\theta)+i\sin(θ))
 //}
 
 
@@ -85,8 +85,11 @@ Go言語では最新バージョンの1.10現在、複素数は以下2つの組�
   	// 極形式(z=r(cos(θ)+i*sin(θ))) の係数
   	c1r, c1theta := cmplx.Polar(c1)
   	c2r, c2theta := cmplx.Polar(c2)
-  	fmt.Printf("abs: %#+v, angle: %#+v\n", c1r, c1theta) // r = sqrt(2), theta = pi / 4
-  	fmt.Printf("abs: %#+v, angle: %#+v\n", c2r, c2theta) // r = 3,       theta = pi / 2
+
+    // r = sqrt(2), theta = pi / 4
+  	fmt.Printf("abs: %#+v, angle: %#+v\n", c1r, c1theta)
+    // r = 3,       theta = pi / 2
+  	fmt.Printf("abs: %#+v, angle: %#+v\n", c2r, c2theta)
 
   	// 極形式の係数から複素数を生成
   	c3 := cmplx.Rect(10, (5.0/8.0)*math.Pi)
