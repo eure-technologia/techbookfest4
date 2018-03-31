@@ -462,7 +462,7 @@ npm run dev
 指定アドレスをブラウザで開くと次のような画面が表示されます。
 
 //image[vue_template][Vue]{
-  //}
+//}
 
 HttpClientにはAxiosを使いますので追加しましょう
 `npm install —save axis`
