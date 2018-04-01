@@ -6,7 +6,7 @@ Webとモバイルアプリだったらどちらかというとモバイルア�
 この記事では、Elmの特徴的な部分であるThe Elm Architectureについて解説します。
 
 
-今回は、サーバへHTTPリクエストを送り、帰ってきた値を適切なViewに当てはめて表示する簡単なWebページを作ってみたいと思います。初期状態から始まり、リクエストを送信し、帰ってきた値をViewにレンダリングするところまでの一通りの動作を実装してみました。
+今回は、サーバへHTTPリクエストを送り、返ってきた値を適切なViewに当てはめて表示する簡単なWebページを作ってみたいと思います。初期状態から始まり、リクエストを送信し、帰ってきた値をViewにレンダリングするところまでの一通りの動作を実装してみました。
 
 
 基本的に、サーバサイドとフロントエンドはJSONでやり取りすることによって完結するようにしました。
@@ -156,7 +156,7 @@ mainPage page = pageWrapper <| div [ class "main-card"
                            ]
                          ]
                          [
-                           img [ src "https://storage.googleapis.com/..."
+                           img [ src "..."
                          , css [
                                  borderRadius (pct 50)
                                , height (pct 100)
@@ -177,31 +177,19 @@ mainPage page = pageWrapper <| div [ class "main-card"
                      ]
 
 //}
-=== main
-これでModel. Update, Viewが揃いました。
-実際に実行する際はどのようにして実行されているのでしょうか。
 
-elmも他の多くのプログラミング言語と同じく、main関数から始まります。今回のアプリケーションではこのような内容になっています。
+このコードは少し長いですが、HTMLとCSSの要素と、そのViewに挿入するModelの中の値をひとまとめに書くことができることがわかります。
 
+これらはelm-html(https://github.com/elm-lang/html)とelm-css(https://github.com/rtfeldman/elm-css)というライブラリを用いる形で記述しています。
 
-//emlist[][]{
-main : Program Never Model Msg
-main =
-     Html.program
-          { init = init
-          , view = view >> toUnstyled
-          , update = update
-          , subscriptions = subscriptions
-          }
-//}
+@<tt>{div}や@<tt>{img}を始めとしたHTMLの要素を関数として、その属性や子要素を引数として記述していますが、通常のHTMLと同じように読むことも可能な見た目になっているため簡単に記述できます。
 
 
-@<tt>{Html.program}には@<tt>{init}, @<tt>{view}, @<tt>{update}, @<tt>{subscriptions}という4つの引数が渡されています。１つずつ見ていきましょう。
+このようにしてModelとView、Updateを定義することによってThe Elm Architectureのアプリケーションを記述することができました。あとは前述のライブラリが提供している@<tt>{Html.program}にこれらの処理と初期状態のモデル等をわたし、それをmain関数とすることによって実際にアプリケーションが動くようになります。
 
 == おわりに
-この記事では、Elmアプリケーションの流れを一通り追ってみました。この記事でElmに興味を持った方へは、公式サイト(http://elm-lang.org/)のサンプルコードを読んでみることをおすすめします。
+この記事では、Elmアプリケーションの流れを一通り追ってみました。この記事でElmに興味を持った方へは、詳しい情報を得るために公式サイト(http://elm-lang.org/)のサンプルコードを読んでみることをおすすめします。
+
 
 == 参考文献
-https://matsubara0507.github.io/posts/2017-12-13-elm-and-haskell-for-elmer.html
-
 https://guide.elm-lang.org/architecture/
