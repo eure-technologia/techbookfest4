@@ -430,7 +430,6 @@ Rest APIができたので、簡易的なフロントを作成してみましょ
 Vue.jsは速度、軽量性、コンポーネント思考を兼ね備えた非常に優れたWebフレームワークです。
 //image[7D0724FE-9B9B-4655-B62E-E17815552BFC][Vue]{
 //}
-
 プロジェクトのテンプレート生成には`vue-cli`というのがあるのでそれを利用します。
 
 Npmでインストールしましょう
@@ -465,11 +464,140 @@ npm run dev
 //}
 
 HttpClientにはAxiosを使いますので追加しましょう
-`npm install —save axis`
+`npm install —save axios`
 
 エディターで作成されたファイルを編集します。
 Vuejsでは、.`vue`ファイルの編集を通してコンポーネントの開発を進めていきます。
 サンプルで生成されたComposerのAPIを使ってAssetsの取得と更新を行える画面の実装をやってみましょう。
+
+=== HelloWorld.vue
+Vuejsでは、各Componentが.vueファイルごとに作成されています。
+Helloworkd.vueを次のように修正してみましょう
+
+//list[HelloWorld.vue][Component][vue]{
+  <template>
+    <div class="hello">
+      <div v-for='(asset, index) in assets' :key='index'>
+        <div class="asset-element"  v-on:click="selected(asset)">
+            <div> ID: {{ asset.assetId }} </div>
+            <div> Value: {{ asset.value   }} </div>
+        </div>
+      </div>
+      <div class="create-assets-form">
+        <input v-model="newId" placeholder="please input asset id">
+        <input v-model="newValue" placeholder="please input asset value">
+        <button v-on:click="addAssets" class="add-button"> create assets</button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+  import axios from 'axios'
+  export default {
+    name: 'HelloWorld',
+    data () {
+      return {
+        assets: [],
+        newId: "",
+        newValue: ""
+      }
+    },
+    created: function() {
+      this.requestAssets()
+    },
+    methods: {
+      requestAssets: function() {
+        axios({
+          method:'get',
+          url:'http://localhost:3000/api/SampleAsset'
+        }).then(res=>{
+          // console.log()
+          this.$data.assets = res.data
+        });
+      },
+      addAssets: function() {
+
+        let id = this.$data.newId;
+        let val = this.$data.newValue;
+
+        if (id.length <= 0 || val.length <= 0) {
+          return;
+        }
+
+        let filtered = this.$data.assets.filter(el=>el.assetId == id)
+        if(filtered.length <= 0) {
+          // IDがない場合は新規作成処理
+          axios({
+            method:'post',
+            url:`http://localhost:3000/api/SampleAsset`,
+            data: {
+                "$class": "org.example.biznet.SampleAsset",
+                "assetId": id,
+                "value": val
+            }
+          }).then(res=>{
+            this.$data.assets.push(res.data)
+          });
+
+          return
+        }
+        console.log('該当するIDの値を更新します')
+          axios({
+            method:'put',
+            url:`http://localhost:3000/api/SampleAsset/${id}`,
+            data: {
+                "$class": "org.example.biznet.SampleAsset",
+                "assetId": id,
+                "value": val
+            }
+          }).then(res=>{
+            this.requestAssets()
+          });
+      },
+      selected: function(asset) {
+        this.$data.newId = asset.assetId
+        this.$data.newValue = asset.value
+      }
+    }
+  }
+  </script>
+
+  <!-- Add "scoped" attribute to limit CSS to this component only -->
+  <style scoped>
+  .asset-element {
+    height: 40px;
+    border-radius:12px;
+    background-color:antiquewhite;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 4px 2px 4px rgba(0,0,0,0.6);
+    transition: 0.3s;
+    margin: 8px;
+  }
+
+  .asset-element:hover {
+    box-shadow: 4px 10px 4px rgba(0,0,0,0.6);
+    transition: 0.3s;
+  }
+
+  .create-assets-form {
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  </style>
+//}
+
+コード中のlocalhostのポートは適宜読み替えてください。
+
+
+//image[vue-assets-update][アセット更新画面]{
+//}
+
+画像のように、Assetsの更新、作成を行える画面が表示されました。
+
 
 
 == これから起こること
@@ -490,7 +618,7 @@ Hyperledger Composerの思想として、煩わしい部分を取り除いて、
 Composerは非常にお勧めでした。
 
 
-Hyperledgerのリポジトリにcomposer-sample-networks（https://github.com/hyperledger/composer-sample-networks）というのがあります。
+Hyperledgerのリポジトリにsample-networks（https://github.com/hyperledger/composer-sample-networks）というのがあります。
 Composerで実装されたいくつかのサンプルをみることができます。
 これを参考に自分なりのアプリケーションを作ってみるのも面白いですね。
 
