@@ -9,7 +9,7 @@ CHAPS:
   - yu81_numeric_calculation_in_go.re
   - proguard-for-android.re
   - lemon_blockchain_introduction.re
-#@# TODO: add takochuu's re
+  - takochuu_graphql.re
   - yuyakaido-redux-on-android.re
 #@# TODO: add marine's re
 
