@@ -58,7 +58,7 @@ CloudIoTCoreやCloudEndPoint等と組み合わせる事で,各端末~データ�
 
 Googleのサンプル画像から見る大雑把な利用モデル
 
-//image[gcp_system][Google公式の構成サンプル]{
+//image[gcp][Google公式の構成サンプル]{
 //}
 
 
@@ -66,7 +66,7 @@ Googleのサンプル画像から見る大雑把な利用モデル
 
 実際に使ってみないと分かりづらいので、今回はこんな感じのフローを例にとりながら説明をしていきたいと思います。
 
-//image[sample_sequence][サンプルシーケンス図]{
+//image[ssd][サンプルシーケンス図]{
 //}
 
 === 前準備
@@ -295,7 +295,7 @@ public class SampleSchemaFactory {
 
 先ほど書いたJavaのコードをビルドして実行するだけで実際にGCP上にジョブがデプロイされます。
 
-//image[deploy-job][デプロイ画面]{
+//image[djb][デプロイ画面]{
 //}
 
 同じjobNameのものはDeployができないので、実運用ではjobのsuffixにtimestampをつけて
@@ -308,7 +308,7 @@ public class SampleSchemaFactory {
 
 GCPのコンソール上からメッセージを送ります。
 
-//image[publish-sample][Pub/Sub画面]{
+//image[pubsub][Pub/Sub画面]{
 //}
 
 BigQueryにデータが挿入されていれば動作確認はOKです :)
@@ -345,7 +345,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class DayPartitionDestinations implements SerializableFunction<ValueInSingleWindow<TableRow>, TableDestination> {
+public class DayPartitionDestinations implements 
+ SerializableFunction<ValueInSingleWindow<TableRow>, TableDestination> {
   private final String tablePrefix;
 
   public DayPartitionDestinations(String tableId) {
@@ -371,7 +372,7 @@ https://beam.apache.org/documentation/sdks/javadoc/2.0.0/org/apache/beam/sdk/io/
 stackdriverにも自動でログが転送されていますので、モニタリング、監視などはCloudFunction経由で
 整形して送るような形でエウレカでは運用しています。
 
-//image[log-resource][log画面sample]{
+//image[log][log画面sample]{
 //}
 
 ==== エラー(例外発生)時の挙動
