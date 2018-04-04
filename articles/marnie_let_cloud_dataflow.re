@@ -28,7 +28,7 @@ GoogleCloudPlatformが提供するストリーム/バッチ方式両方をサポ
 ApacheBeamを基にしたSDKが提供されており任意のinput(pubsubやmysql,gcs)から得たデータの変換、
 GCS,BigQueryへのデータ流し込みといったいわゆるETL(抽出/変換/データハウス出力)処理を
 Java,Pythonでプログラムで表現することが可能です。
- 
+
 (*) 2018/02時点ではストリーム対応はJavaのみ
 
 == どんなところがよいの?
@@ -117,7 +117,7 @@ eclipseの場合はpluginからCloudDataFlow用のPluginなども用意されて
 今回の例ではsubscriptionとtableNameという引数の拡張をしたかったので
 DataflowPipelineOptionsを継承したinterfaceを定義しています。
 
-//listunum[実行時の引数の取り方のサンプル][java]{
+//listnum[実行時の引数の取り方のサンプル][java]{
 
     public static void main(String[] args) {
         PipelineOptionsFactory.register(XXXXOptions.class);
@@ -140,7 +140,7 @@ DataflowPipelineOptionsを継承したinterfaceを定義しています。
     }
 //}
 
-//listunum[実行コマンドののサンプル][shell]{
+//listnum[実行コマンドのサンプル][shell]{
 	mvn compile exec:java \
 	-Dexec.mainClass=YourMainClass \
 	-Dexec.args="--project=YourGCPProject \
@@ -283,8 +283,6 @@ public class SampleSchemaFactory {
 
         return schema;
     }
-}
-
 //}
 
 === デプロイ/テスト
@@ -331,7 +329,7 @@ SerializableFunctionをimplementしたカスタムクラスを実装すると実
         p.run();
 //}
 
-//listnum[BigQueryのSchemaObjectのサンプルコード][java]{
+//listnum[Destinationsのサンプルコード][java]{
 import com.google.api.services.bigquery.model.TableRow;
 import org.apache.beam.sdk.io.gcp.bigquery.TableDestination;
 import org.apache.beam.sdk.transforms.SerializableFunction;
