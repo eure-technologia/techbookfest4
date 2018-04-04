@@ -564,8 +564,10 @@ Helloworkd.vueを次のように修正してみましょう
   </style>
 //}
 
+
 コード中のlocalhostのポートは適宜読み替えてください。
 
+コードはgistに上がってます(https://gist.github.com/KawabataLemon/)
 
 //image[vue-assets-update][アセット更新画面]{
 //}
