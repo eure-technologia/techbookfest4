@@ -58,14 +58,16 @@ CloudIoTCoreやCloudEndPoint等と組み合わせる事で,各端末~データ�
 
 Googleのサンプル画像から見る大雑把な利用モデル
 
-img
+//image[gcp_system][Google公式の構成サンプル]{
+//}
 
 
 == 実践しよう!
 
 実際に使ってみないと分かりづらいので、今回はこんな感じのフローを例にとりながら説明をしていきたいと思います。
 
-img
+//image[sample_sequence][サンプルシーケンス図]{
+//}
 
 === 前準備
 
@@ -82,11 +84,11 @@ GCPのアカウントやプロジェクトの設定については準備でき�
 Streamingの対応は現状ではJavaSDKのみですので、今回はJavaで進めていきたいと思います。
 pom.xmlに以下を記載してSDKをプロジェクトにダウンロードします。
 //listnum[pom.xml][xml]{
-    <dependency>
-      <groupId>com.google.cloud.dataflow</groupId>
-      <artifactId>google-cloud-dataflow-java-sdk-all</artifactId>
-      <version>[2.2.0, 2.99)</version>
-    </dependency>
+<dependency>
+  <groupId>com.google.cloud.dataflow</groupId>
+  <artifactId>google-cloud-dataflow-java-sdk-all</artifactId>
+  <version>[2.2.0, 2.99)</version>
+</dependency>
 //}
 
 eclipseの場合はpluginからCloudDataFlow用のPluginなども用意されていますが、
@@ -97,20 +99,20 @@ eclipseの場合はpluginからCloudDataFlow用のPluginなども用意されて
 まず処理を行うパイプラインのオプションを設定します。
 
 //listnum[pipeLineOptionsのサンプルコード][java]{
-        DataflowPipelineOptions options = PipelineOptionsFactory.create()
-                .as(DataflowPipelineOptions.class);
-        // 自分の使っているプロジェクト名を指定
-        options.setProject("your gcp porject");
-        // Dataflowがstagingに利用するGCSBucketを作って指定
-        options.setStagingLocation("gs://hoge/staging");
-        // Dataflowが一時利用するGCSBucketを作って指定
-        options.setTempLocation("gs://hoge/tmp");
-        // 実行するランナーを指定。GCP上で実行する場合はDataflowRunnerを指定。local実行の場合はDirectRunnerを指定します。
-        options.setRunner(DataflowRunner.class);
-        // streamingを有効にする
-        options.setStreaming(true);
-        // 動作時の名称を指定(同じ名称のジョブは同時に稼働できない
-        options.setJobName("sample");
+DataflowPipelineOptions options = PipelineOptionsFactory.create()
+  .as(DataflowPipelineOptions.class);
+  // 自分の使っているプロジェクト名を指定
+  options.setProject("your gcp porject");
+  // Dataflowがstagingに利用するGCSBucketを作って指定
+  options.setStagingLocation("gs://hoge/staging");
+  // Dataflowが一時利用するGCSBucketを作って指定
+  options.setTempLocation("gs://hoge/tmp");
+  // 実行するランナーを指定。GCP上で実行する場合はDataflowRunner,local実行の場合はDirectRunner
+  options.setRunner(DataflowRunner.class);
+  // streamingを有効にする
+  options.setStreaming(true);
+  // 動作時の名称を指定(同じ名称のジョブは同時に稼働できない
+  options.setJobName("sample");
 //}
 
 コマンドラインから値を注入したい場合は以下のような書き方ができます。
@@ -118,37 +120,35 @@ eclipseの場合はpluginからCloudDataFlow用のPluginなども用意されて
 DataflowPipelineOptionsを継承したinterfaceを定義しています。
 
 //listnum[実行時の引数の取り方のサンプル][java]{
+public static void main(String[] args) {
+  PipelineOptionsFactory.register(XXXXOptions.class);
+  XXXXOptions options = PipelineOptionsFactory.fromArgs(args)
+    .withValidation()
+    .as(XXXXLogOptions.class);
+}
 
-    public static void main(String[] args) {
-        PipelineOptionsFactory.register(XXXXOptions.class);
-        XXXXOptions options = PipelineOptionsFactory.fromArgs(args)
-                .withValidation()
-                .as(XXXXLogOptions.class);
-    }
+private interface XXXXOptions extends DataflowPipelineOptions {
+  @Description("Input Pubsub subscription")
+  @Validation.Required
+  String getSubscription();
+  void setSubscription(String subscription);
 
-    private interface XXXXOptions extends DataflowPipelineOptions {
-
-        @Description("Input Pubsub subscription")
-        @Validation.Required
-        String getSubscription();
-        void setSubscription(String subscription);
-
-        @Description("Output BigQuery table")
-        @Validation.Required
-        String getBigQueryTable();
-        void setBigQueryTable(String bigQueryTable);
-    }
+  @Description("Output BigQuery table")
+  @Validation.Required
+  String getBigQueryTable();
+  void setBigQueryTable(String bigQueryTable);
+}
 //}
 
 //listnum[実行コマンドのサンプル][shell]{
-	mvn compile exec:java \
-	-Dexec.mainClass=YourMainClass \
-	-Dexec.args="--project=YourGCPProject \
-	--subscription=projects/yourProject/subscriptions/xxxxx \
-	--bigQueryTable=yourProject:DatasetName.TableName \
-	--tempLocation=gs://dataflowWorkSpace/tmp \
-	--jobName=yourJobname-timestamp \
-	--stagingLocation=gs://dataflowWorkSpace/staging"
+mvn compile exec:java \
+  -Dexec.mainClass=YourMainClass \
+  -Dexec.args="--project=YourGCPProject \
+  --subscription=projects/yourProject/subscriptions/xxxxx \
+  --bigQueryTable=yourProject:DatasetName.TableName \
+  --tempLocation=gs://dataflowWorkSpace/tmp \
+  --jobName=yourJobname-timestamp \
+  --stagingLocation=gs://dataflowWorkSpace/staging"
 //}
 
 === Dataflow上でのプログラミングを構成する基礎概念
@@ -183,33 +183,37 @@ DataflowPipelineOptionsを継承したinterfaceを定義しています。
 をパイプラインに適用していきます。
 
 //listnum[パイプライン構築のサンプルコード][java]{
-        //パイプライン（処理するジョブ)オブジェクトを生成
-        Pipeline p = Pipeline.create(options);
-        TableSchema schema = SampleSchemaFactory.create();
-        // 処理内容を適用する
-        // pubsubのsubscriptionからデータを読み出す
-        p.apply(PubsubIO.readStrings().fromSubscription("your pubsub subscription"))
-        // 5分間隔のwindowを指定(使いたい場合は)
-                .apply(Window.<String>into(FixedWindows.of(Duration.standardMinutes(5))))
-        // pubsubからの入力に対する変換を設定 (実装は後述)
-                .apply(ParDo.of(new BigQueryRowConverter()))
-        // BigQueryへの書き込みを設定
-                .apply("WriteToBQ", BigQueryIO.writeTableRows()
-                        //書き込み先テーブル名を指定
-                        .to(TableDestination("dataset_name:table_name","description"))
-                        //書き込み先のschemaをObjectで定義して渡す
-                        .withSchema(schema)
-                        //テーブルがなければ作成する(オプション)
-                        .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
-                        //テーブル末尾にデータを挿入していく（オプション)
-                        .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND));
-        // 実行
-        p.run();
+
+  // パイプライン（処理するジョブ)オブジェクトを生成
+  Pipeline p = Pipeline.create(options);
+  TableSchema schema = SampleSchemaFactory.create();
+  // 処理内容を適用する
+  // pubsubのsubscriptionからデータを読み出す
+  p.apply(PubsubIO.readStrings().fromSubscription("your pubsub subscription"))
+  // 5分間隔のwindowを指定
+    .apply(Window.<String>into(FixedWindows.of(Duration.standardMinutes(5))))
+  // pubsubからの入力に対する変換を設定 (実装は後述)
+    .apply(ParDo.of(new BigQueryRowConverter()))
+  // BigQueryへの書き込みを設定
+     .apply("WriteToBQ", BigQueryIO.writeTableRows()
+       // 書き込み先テーブル名を指定
+       .to(TableDestination("dataset_name:table_name","description"))
+       // 書き込み先のschemaをObjectで定義して渡す
+       .withSchema(schema)
+       // テーブルがなければ作成する(オプション)
+       .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
+       // テーブル末尾にデータを挿入していく（オプション)
+       .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND));
+  // 実行
+  p.run();
+
 //}
 
 * 上記で設定したJsonObjectからBigQueryへの変換(`BigQueryRowConverter`)の実装
 
-ParDoを使った変換の場合、DoFnを継承し抽象メソッドであるprocessElementの中にデータの取り出し〜PCollectionへの変換を実装します。
+ParDoを使った変換を実装します。
+DoFnを継承し抽象メソッドである、processElementの中に
+データの取り出し〜PCollectionへの変換を実装します。
 
 //listnum[変換処理のサンプルコード][java]{
 package com.mycompany.dataflow_sample.converter;
@@ -220,31 +224,30 @@ import com.mycompany.dataflow_sample.entity.SampleInputJson;
 import org.apache.beam.sdk.transforms.DoFn;
 
 public class BigQueryRowConverter extends DoFn<String,TableRow> {
+  @ProcessElement
+  public void processElement(ProcessContext dofn) throws Exception {
+    // 入力を受け取る
+    String json = dofn.element();
+    Gson gson = new Gson();
+    // jsonをobjectに変換
+    SampleInputJson jsonObj = gson.fromJson(json,SampleInputJson.class);
+    // jsonの内容をbigqueryのtableRowに変換していく
+    TableRow output = new TableRow();
+    TableRow attributesOutput = new TableRow();
+    TableRow attr2Output = new TableRow();
+    // 出力にデータをセットする
+    attributesOutput.set("attr1", jsonObj.attributes.attr1);
+    attributesOutput.set("attr2", jsonObj.attributes.attr2);
+    attr2Output.set("attr2_prop1",jsonObj.attributes.attr2.prop1);
+    attr2Output.set("attr2_prop2",jsonObj.attributes.attr2.prop2);
 
-    @ProcessElement
-    public void processElement(ProcessContext dofn) throws Exception {
-      // 入力を受け取る
-      String json = dofn.element();
-      Gson gson = new Gson();
-      // jsonをobjectに変換
-      SampleInputJson jsonObj = gson.fromJson(json,SampleInputJson.class);
-      // jsonの内容をbigqueryのtableRowに変換していく
-      TableRow output = new TableRow();
-      TableRow attributesOutput = new TableRow();
-      TableRow attr2Output = new TableRow();
-      // 出力にデータをセットする
-      attributesOutput.set("attr1", jsonObj.attributes.attr1);
-      attributesOutput.set("attr2", jsonObj.attributes.attr2);
-      attr2Output.set("attr2_prop1",jsonObj.attributes.attr2.prop1);
-      attr2Output.set("attr2_prop2",jsonObj.attributes.attr2.prop2);
-
-      attributesOutput .set("attr2",attr2Output);
-      output.set("attributes", attributesOutput );
-      output.set("name", jsonObj.name);
-      output.set("ts", jsonObj.timeStamp/1000);
-      // 出力する
-      dofn.output(output);
-    }
+    attributesOutput .set("attr2",attr2Output);
+    output.set("attributes", attributesOutput );
+    output.set("name", jsonObj.name);
+    output.set("ts", jsonObj.timeStamp/1000);
+    // 出力する
+    dofn.output(output);
+  }
 }
 //}
 
@@ -259,39 +262,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SampleSchemaFactory {
-    public static TableSchema create() {
-        List<TableFieldSchema> fields;
-        fields = new ArrayList<> ();
-        fields.add(new TableFieldSchema().setName("name").setType("STRING"));
-        fields.add(new TableFieldSchema().setName("ts").setType("TIMESTAMP"));
-        fields.add(new TableFieldSchema().setName("attributes").setType("RECORD")
-                .setFields(new ArrayList<TableFieldSchema>() {
-                    {
-                        add(new TableFieldSchema().setName("attr1").setType("STRING"));
-                        add(new TableFieldSchema().setName("attr2").setType("RECORD")
-                            .setFields(new ArrayList<TableFieldSchema>() {
-                                {
-                                    add(new TableFieldSchema().setName("prop1").setType("INTEGER"));
-                                    add(new TableFieldSchema().setName("prop2").setType("STRING"));
-                                }
-                            })
-                        );
-                    }
-                })
-        );
-        TableSchema schema = new TableSchema().setFields(fields);
+  public static TableSchema create() {
+    List<TableFieldSchema> fields;
+    fields = new ArrayList<> ();
+    fields.add(new TableFieldSchema().setName("name").setType("STRING"));
+    fields.add(new TableFieldSchema().setName("ts").setType("TIMESTAMP"));
+    fields.add(new TableFieldSchema().setName("attributes").setType("RECORD")
+      .setFields(new ArrayList<TableFieldSchema>() {
+        {
+          add(new TableFieldSchema().setName("attr1").setType("STRING"));
+          add(new TableFieldSchema().setName("attr2").setType("RECORD")
+            .setFields(new ArrayList<TableFieldSchema>() {
+              {
+                add(new TableFieldSchema().setName("prop1").setType("INTEGER"));
+                add(new TableFieldSchema().setName("prop2").setType("STRING"));
+              }
+            })
+          );
+        }
+      })
+    );
+    TableSchema schema = new TableSchema().setFields(fields);
 
-        return schema;
-    }
+    return schema;
+  }
+}
 //}
 
 === デプロイ/テスト
 
-* デプロイ
+==== デプロイ
 
 先ほど書いたJavaのコードをビルドして実行するだけで実際にGCP上にジョブがデプロイされます。
 
-img
+//image[deploy-job][デプロイ画面]{
+//}
 
 同じjobNameのものはDeployができないので、実運用ではjobのsuffixにtimestampをつけて
 一つ前のJobをDorainで止めて新しいJobを立ち上げるような運用がよいのかなぁと。
@@ -299,11 +304,12 @@ img
 データが常に流れ続けるような物を入力にとる場合はCloudPub/Subのようなデータの滞留が可能な
 メッセージバスで受けてSubscriptionから入力をとるようにする必要があります。
 
-* CloudPubSubからメッセージを送る
+==== CloudPubSubからメッセージを送る
 
 GCPのコンソール上からメッセージを送ります。
 
-img
+//image[publish-sample][Pub/Sub画面]{
+//}
 
 BigQueryにデータが挿入されていれば動作確認はOKです :)
 
@@ -318,15 +324,15 @@ SerializableFunctionをimplementしたカスタムクラスを実装すると実
 下記の例ではデータのタイムスタンプを参照して日別のテーブルへのinsertを実装しています。
 
 //listnum[PipeLine側のサンプル][java]{
-        p.apply(PubsubIO.readStrings().fromSubscription(options.getSubscription()))
-                .apply(Window.into(FixedWindows.of(Duration.standardMinutes(5))))
-                .apply(ParDo.of(new BigQueryRowConverter()))
-                .apply("WriteToBQ", BigQueryIO.writeTableRows()
-                        .to(new DayPartitionDestinations("dataset:tableName")
-                        .withSchema(XXXXSchemaFactory.create())
-                        .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
-                        .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND));
-        p.run();
+p.apply(PubsubIO.readStrings().fromSubscription(options.getSubscription()))
+  .apply(Window.into(FixedWindows.of(Duration.standardMinutes(5))))
+  .apply(ParDo.of(new BigQueryRowConverter()))
+  .apply("WriteToBQ", BigQueryIO.writeTableRows()
+    .to(new DayPartitionDestinations("dataset:tableName")
+    .withSchema(XXXXSchemaFactory.create())
+    .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
+    .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND));
+p.run();
 //}
 
 //listnum[Destinationsのサンプルコード][java]{
@@ -340,20 +346,20 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class DayPartitionDestinations implements SerializableFunction<ValueInSingleWindow<TableRow>, TableDestination> {
-    private final String tablePrefix;
+  private final String tablePrefix;
 
-    public DayPartitionDestinations(String tableId) {
-        tablePrefix = tableId + "_";
-    }
+  public DayPartitionDestinations(String tableId) {
+    tablePrefix = tableId + "_";
+  }
 
-    @Override
-    public TableDestination apply(ValueInSingleWindow<TableRow> input) {
-        Double timeStamp = (Double)(input.getValue().get("ts"));
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat("YYYYMMdd");
-        Date date = new Date((long)(timeStamp*1000));
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return new TableDestination(tablePrefix + sdf.format(date), "datalog");
-    }
+  @Override
+  public TableDestination apply(ValueInSingleWindow<TableRow> input) {
+    Double timeStamp = (Double)(input.getValue().get("ts"));
+    SimpleDateFormat sdf = new java.text.SimpleDateFormat("YYYYMMdd");
+    Date date = new Date((long)(timeStamp*1000));
+    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+    return new TableDestination(tablePrefix + sdf.format(date), "datalog");
+  }
 //}
 
 DynamicDestinationsを利用しても上記と同じようなコードで実現できますので、興味がある方はこちらを参照してみてください。
@@ -365,7 +371,8 @@ https://beam.apache.org/documentation/sdks/javadoc/2.0.0/org/apache/beam/sdk/io/
 stackdriverにも自動でログが転送されていますので、モニタリング、監視などはCloudFunction経由で
 整形して送るような形でエウレカでは運用しています。
 
-img
+//image[log-resource][log画面sample]{
+//}
 
 ==== エラー(例外発生)時の挙動
 
@@ -396,10 +403,11 @@ apacheBeamのリファレンスやSDKのJavaDocを参考にすると理解が進
 以下のような気持ちや特徴をお持ちの方は、カジュアルランチもやってますので
 是非お気軽にエウレカを訪問ください!
 
-* わしのデータフローは108段あるぞ
+* わしのデータフローは108段あるぞ。
 * おい、そんなデータ処理で大丈夫か？
-* 一緒に全国大会に出たい
-* メガネっ娘である
+* 一緒にデータの海を漕ぎ出したい。
+* メガネっ娘である。
+* 猫が好きである、ヘッダーの猫画像に興味を持った。
 
 == 参考にしたサイトや役に立った情報
 
