@@ -7,9 +7,10 @@ CHAPS:
   - boxp_clojure.re
   - zukkey_groupie.re
   - yu81_numeric_calculation_in_go.re
+  - marnie_let_cloud_dataflow.re
   - proguard-for-android.re
   - lemon_blockchain_introduction.re
-#@# TODO: add takochuu's re
+  - takochuu_graphql.re
   - yuyakaido-redux-on-android.re
 #@# TODO: add marine's re
 
