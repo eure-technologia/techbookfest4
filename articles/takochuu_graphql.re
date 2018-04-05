@@ -2,15 +2,13 @@
 
 == 自己紹介
 こんにちは！はじめまして。
-
-株式会社エウレカでPairsのサーバーサイドを書いています。@takochuuです。
+株式会社エウレカでPairsのサーバーサイドを書いています。@takochuuです。@<br>{}
 
 主にSPA / ネイティブアプリ向けのAPIを書く事が多いので、GraphQLをはじめとした
 APIに用いられる技術と最近着目されているAPI向けの技術に関してこの章を書きたいと思います。
 
 
 == はじめに
-
 本章ではWeb APIに用いられる技術について解説します。
 
 RESTの流行と共に、json形式でのRequest / Responseが主流となっていますが
@@ -42,26 +40,17 @@ SOAPで採用されているXMLには冗長性があり、Javascriptや動的型
 
 
 == 課題
-RESTはRoy Fielding氏が2000年に発表した論文(https://en.wikipedia.org/wiki/Representational_state_transfer)に基づいていますが
-HTTP上の対話モデルをアーキテクチャとして定義しているに過ぎず、endpointのpathの定義の方法やバージョニング、エラー処理等については何の言及もありません。
+RESTはRoyFielding氏が2000年に発表した論文(@<href>{https://en.wikipedia.org/wiki/Representational_state_transfer})に基づいていますが
+HTTP上の対話モデルをアーキテクチャとして定義しているに過ぎず、endpointのpathの定義の方法やバージョニング、エラー処理等については何の言及もありません。@<br>{}
+
 
 
 
 実際のプロダクト開発として考えると、以下のような問題に直面したみなさんも多いのではないでしょうか。
 
-1.書く人によってendpointの命名方法が異なる
-
-
-2.Request/Responseに一貫したSchema定義がないことにより、大規模開発時に一貫性が失われる(ところによりSchema定義を別途書くなどの面倒さを抱えることになる)
-
-
-3.httpリクエストで対応仕切れない部分が出て来る(GETでの更新処理など)
-
-
-
-(なんか図を入れる)
-
-
+1. 書く人によってendpointの命名方法が異なる@<br>{}
+2. Request/Responseに一貫したSchema定義がないことにより、大規模開発時に一貫性が失われる(ところによりSchema定義を別途書くなどの面倒さを抱えることになる)@<br>{}
+3. httpリクエストで対応仕切れない部分が出て来る(GETでの更新処理など)@<br>{}
 
 上記のような状態に悩まされている読者の方もいらっしゃるのではないでしょうか。
 実際、筆者が今まで開発してきたプロダクトもこのような状態で悩まされていました。
@@ -76,11 +65,12 @@ GraphQLとはFacebookが開発しているクエリ言語で、 2015年のReact.
 近年ではGithubのv4APIにて採用されていることや、2018年のDroidKaigiでgfxさんが発表していたこともあり
 徐々に浸透しつつある技術なのではないでしょうか。
 
-
-(GraphQLのロゴと公式サイトのURL入れる)
+//image[GraphQL][]{
+//}
 
 GraphQLの大きな特徴として、Queryという構文でサーバーに対してQueryを発行することができます。
-DroidKaigiにてgfxさんも言及していますが、リソース更新のメソッドもあるものの現状は取得用途に使われる仕様だと考えておいたほうが良いでしょう。
+リソース更新のメソッドもあるものの現状は取得用途に使われる仕様だと考えておいたほうが良いでしょう。
+
 
 
 それでは、サンプルとしてGithubのv4APIに対してGraphiQLで取得をしてみましょう。
@@ -91,18 +81,23 @@ https://developer.github.com/v4/explorer/
 このような形でクエリを書いて実行するとサーバーからjson形式でレスポンスが返ってきている事がわかります。
 
 
-(GraphiQLのスクショを張る)
-
+//image[GraphiQL][デフォルトのクエリ]{
+//}
 
 
 クエリを書き換え、このようにしてみると返却されるレスポンスが変化していることがわかります。
 
 
-(GraphiQLのスクショを張る)
+//image[GrapiQL_mod][クエリを変更後]{
+//}
 
 
 
 これが、8-4で述べる利点と通ずる事になります。
+余談ですがGrapiQLは、下記のようにドキュメントを閲覧する機能も実装しており、非常に強力なツールになっています。
+
+//image[GrapiQL_Document][右側にドキュメントが表示されます]{
+//}
 
 
 == GraphQLを活用することの利点
@@ -251,9 +246,7 @@ Queryに引数を渡すこともできます。
 			Resolve: resolveID,
 		},
   }
-//}
 
-//emlist[][]{
   func resolveID(p graphql.ResolveParams) (interface{}, error) {
   	return p.Args["id"], nil
   }
