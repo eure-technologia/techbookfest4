@@ -4,16 +4,18 @@
 
 こんにちはこんにちは、株式会社エウレカのSREチームに所属している
 @marnieです。
-SREと言いつつgoやらjavaやらコード書いてる時間のが多い気がしますが、
+最近はSREと言いつつgoやらjavaやらコード書いてる時間のが多い気がしますが、
 気にしない方向で日々を過ごしています。
 
-あまり関係ないですが、幼女戦記はコミック版が面白いので是非まだの方は
-コミック版から入ってください。
+プライベートでは自転車・猫の奴隷・ライブ・アニメやら日々無軌道に酒を飲んで暮らしていたのですが
+結婚と出産というシステムに翻弄されております。
 
-== データラッシュ2018
 
-さてさて、最近は猫も杓子もビッグデータ,機械学習という感じで、
-データの活用以前に分析のための収集や処理といったニーズは増えていく一方ですね。
+== 空前絶後のビッグデータブーム
+
+さてさて、最近流行のワードといえばビッグデータ,機械学習という感じでではないでしょうか？
+サービスの運営における仮説検証を支える分析のための収集や処理、
+機械学習の為のデータ加工などなどニーズは増えていく一方ですね。
 
 データが多すぎて処理がパンクしてデータ欠損する悲鳴もあれば、
 これからデータ基盤を作りたいんだけど、どうしようといった悩みを持っていたり、
@@ -42,8 +44,7 @@ CloudPubsubからのデータ入力などは実質数行で表現できますし
 安心できるところですし、料金体系的にも従量課金なので、まずはデータ基盤を作ってみるという
 データ本当に使うんかなぁ、とかいろいろ考えるとSpark Streamingを0から構築しようぜ！とか男気を見せるよりはよっぽど敷居が低くて
 SaaSであるCloudDataFlowの方がこれからデータ処理環境を構築するようなスモールスタートにも適していると思います。
-「とりあえずデータ基盤ほしいんだよ！規模とかわかんないけど！XX君!」
-そんなふわっとした無茶な要求に対しても華麗にカウンターを決められます。
+よくある、ふわっとした無茶な要求に対しても、華麗にカウンターを決められます。
 転ばぬ先のDataFlow。
 
 == 活用方法
@@ -77,7 +78,7 @@ GCPのアカウントやプロジェクトの設定については準備でき�
 
 Streamingの対応は現状ではJavaSDKのみですので、今回はJavaで進めていきたいと思います。
 pom.xmlに以下を記載してSDKをプロジェクトにダウンロードします。
-//listnum[pom.xml][xml]{
+//listnum[][pom.xml][xml]{
 <dependency>
   <groupId>com.google.cloud.dataflow</groupId>
   <artifactId>google-cloud-dataflow-java-sdk-all</artifactId>
@@ -92,7 +93,7 @@ eclipseの場合はpluginからCloudDataFlow用のPluginなども用意されて
 
 まず処理を行うパイプラインのオプションを設定します。
 
-//listnum[pipeLineOptionsのサンプルコード][java]{
+//listnum[][pipeLineOptionsのサンプルコード][java]{
 DataflowPipelineOptions options = PipelineOptionsFactory.create()
   .as(DataflowPipelineOptions.class);
   // 自分の使っているプロジェクト名を指定
@@ -113,7 +114,7 @@ DataflowPipelineOptions options = PipelineOptionsFactory.create()
 今回の例ではsubscriptionとtableNameという引数の拡張をしたかったので
 DataflowPipelineOptionsを継承したinterfaceを定義しています。
 
-//listnum[実行時の引数の取り方のサンプル][java]{
+//listnum[][実行時の引数の取り方のサンプル][java]{
 public static void main(String[] args) {
   PipelineOptionsFactory.register(XXXXOptions.class);
   XXXXOptions options = PipelineOptionsFactory.fromArgs(args)
@@ -134,7 +135,7 @@ private interface XXXXOptions extends DataflowPipelineOptions {
 }
 //}
 
-//listnum[実行コマンドのサンプル][shell]{
+//listnum[][実行コマンドのサンプル][shell]{
 mvn compile exec:java \
   -Dexec.mainClass=YourMainClass \
   -Dexec.args="--project=YourGCPProject \
@@ -153,22 +154,21 @@ mvn compile exec:java \
  * PipeLine
 
 処理ジョブを表現するオブジェクト
-基本的にPipeLineに処理の流れ(入力・変換・出力)を適用(apply)する事で処理を構築します。
+基本的にPipeLineに自分の書いた変換処理とPipeLineI/O等の必要な処理を適用して
+ジョブを構築する事になります。
 
  * PCollection
 
-入力や出力といったデータを表現するオブジェクト
+入力や出力といったデータを表現するオブジェクト。
+基本的にこのオブジェクトを次の変換処理でこねこねします。
 
  * 変換
 
 入力データを出力データに変換する処理部分
 
-===== PipeLineI/O
+ * PipeLineI/O
 
 入力ないし、出力関連のAPI群です。BigQueryやGCS,PubSub,Fileなど大体の用途の物は標準で用意されています。
-
-基本的にPipeLineに自分の書いた変換処理とPipeLineI/O等の必要な処理を適用して
-ジョブを構築する事になります。
 
 === inputの読み取り~outputまでのコードを書く
 
@@ -180,10 +180,11 @@ mvn compile exec:java \
 
 をパイプラインに適用していきます。
 
-//listnum[パイプライン構築のサンプルコード][java]{
+//listnum[][パイプライン構築のサンプルコード][java]{
 
   // パイプライン（処理するジョブ)オブジェクトを生成
   Pipeline p = Pipeline.create(options);
+  // Outputに使うBigQueryのSchemaObjectの生成、実装は後述
   TableSchema schema = SampleSchemaFactory.create();
   // 処理内容を適用する
   // pubsubのsubscriptionからデータを読み出す
@@ -207,13 +208,7 @@ mvn compile exec:java \
 
 //}
 
- * 上記で設定したJsonObjectからBigQueryへの変換(`BigQueryRowConverter`)の実装
-
-ParDoを使った変換を実装します。
-DoFnを継承し抽象メソッドである、processElementの中に
-データの取り出し〜PCollectionへの変換を実装します。
-
-//listnum[変換処理のサンプルコード][java]{
+//listnum[][変換処理のサンプルコード][java]{
 package com.mycompany.dataflow_sample.converter;
 
 import com.google.api.services.bigquery.model.TableRow;
@@ -249,9 +244,7 @@ public class BigQueryRowConverter extends DoFn<String,TableRow> {
 }
 //}
 
- * 上記の`SampleSchemaFactory.create()`の実装
-
-//listnum[BigQueryのSchemaObjectのサンプルコード][java]{
+//listnum[][BigQueryのSchemaObjectのサンプルコード][java]{
 package com.mycompany.dataflow_sample.schema;
 
 import com.google.api.services.bigquery.model.TableFieldSchema;
@@ -321,7 +314,7 @@ BigQueryにデータが挿入されていれば動作確認はOKです :)
 SerializableFunctionをimplementしたカスタムクラスを実装すると実現が容易です。
 下記の例ではデータのタイムスタンプを参照して日別のテーブルへのinsertを実装しています。
 
-//listnum[PipeLine側のサンプル][java]{
+//listnum[][PipeLine側のサンプル][java]{
 p.apply(PubsubIO.readStrings().fromSubscription(options.getSubscription()))
   .apply(Window.into(FixedWindows.of(Duration.standardMinutes(5))))
   .apply(ParDo.of(new BigQueryRowConverter()))
@@ -333,7 +326,7 @@ p.apply(PubsubIO.readStrings().fromSubscription(options.getSubscription()))
 p.run();
 //}
 
-//listnum[Destinationsのサンプルコード][java]{
+//listnum[][Destinationsのサンプルコード][java]{
 import com.google.api.services.bigquery.model.TableRow;
 import org.apache.beam.sdk.io.gcp.bigquery.TableDestination;
 import org.apache.beam.sdk.transforms.SerializableFunction;
@@ -387,7 +380,7 @@ DataflowJobを実行中にExceptionが発生した場合、PubSubにACKを送ら
 あまりデータ量が多い場合、Windowでデータを集計して減らす、Quotaの引き上げをGoogleに打診する等
 をしたほうがよいです。
 
-https://cloud.google.com/bigquery/quotas#streaming_inserts
+* https://cloud.google.com/bigquery/quotas#streaming_inserts
 
 == まとめ
 
@@ -399,21 +392,22 @@ GCP内の連携と大雑把な流れを説明したかったので、やや本�
 というところの説明まで至れませんでしたが、github上のwordCountのsampleや
 apacheBeamのリファレンスやSDKのJavaDocを参考にすると理解が進むと思います :)
 
+== CM
+
 私もまだまだ研究中で、仲間がいると嬉しいなぁ..と思っているので
 この記事を読んで
- 
+
  * わしのデータフローは108段あるぞ。
  * おい、そんなデータ処理で大丈夫か？
  * 一緒にデータの海を漕ぎ出したい。
  * メガネっ娘である。
  * 猫が好きである、ヘッダーの猫画像に興味を持った。
- * エウレカに興味がわいてきたよ(おまけ感)
-
-そんな感想や才能をお持ちの方、カジュアルランチもやってますので
+ * エウレカに興味がわいてきたよ
+そんな感想や才能をお持ちの方、カジュアルランチやエンジニア募集もやってますので
 是非お気軽にエウレカを訪問ください!
 
 == 参考にしたサイトや役に立った情報
 
-https://github.com/GoogleCloudPlatform/DataflowSDK-examples
-https://beam.apache.org/
-https://cloud.google.com/dataflow/?hl=ja
+ * https://github.com/GoogleCloudPlatform/DataflowSDK-examples
+ * https://beam.apache.org/
+ * https://cloud.google.com/dataflow/?hl=ja
