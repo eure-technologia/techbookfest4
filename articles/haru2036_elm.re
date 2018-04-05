@@ -5,8 +5,6 @@
 Webフロントをあんまりやったことがないことに気が付き、ちょっと変わったチョイスですがElmを触ってみることにしました。
 
 この記事では、Elmの特徴的な部分であるThe Elm Architectureについて解説します。
-
-
 今回は、サーバへHTTPリクエストを送り、返ってきた値を適切なViewに当てはめて表示する簡単なWebページを作ってみたいと思います。初期状態から始まり、リクエストを送信し、帰ってきた値をViewにレンダリングするところまでの一通りの動作を実装してみました。
 
 
@@ -42,7 +40,7 @@ Modelの更新はここで行われます。
 Viewは、Modelの内容をレンダリングします。これにより、Modelの内容がユーザに見えるようになります。
 
 
-Elm Architectureは大雑把にはこの3つがループして動作するような形になっています。初期状態のModelがあるところから、UpdateによりModelが更新され、新しいModelの内容がViewによってレンダリングされるという形です。
+Elm Architectureは大雑把にはこの3つがループして動作するような形になっています。初期状態から始まり、UpdateによりModelが更新されて、新しいModelの内容がViewによってレンダリングされるという形です。
 
 
 
@@ -51,7 +49,9 @@ Elm Architectureは大雑把にはこの3つがループして動作するよう
 この3つのパーツの間をやり取りするためにあるのがMessageとCommandです。
 
 MessageはUpdateで処理されるアクションを表すデータ型で、そこに定義されたアクションが起こったときにMessageが発行されUpdateで処理されます。
-例えば、ボタンのクリック、APIへのリクエストへのレスポンスが帰ってきた、等です。
+例えば、ボタンのクリック、APIへのリクエストのレスポンスが帰ってきた、等です。
+
+
 Commandは外部とのやり取りを表します。APIへのリクエストを送るときにMessageをラップし、外部とのやり取りが完了するとラップされているMessageがUpdateに渡ります。
 
 これを図にしてみると以下のようになります。
@@ -181,6 +181,19 @@ mainPage page = pageWrapper <| div [ class "main-card"
                        ]
                      ]
 
+pageWrapper : Html Msg -> Html Msg
+pageWrapper body = div [ class "main-wrapper"
+                 , css [ position relative
+                       , width (pct 100)
+                       , height (pct 100)
+                       , backgroundImage (url "...")
+                       , display block
+                       , backgroundSize cover
+                       , backgroundRepeat noRepeat
+                       , backgroundPosition center
+                       ]
+                 ]
+                 [ body ]
 //}
 
 このコードは少し長いですが、HTMLとCSSの要素と、そのViewに挿入するModelの中の値をひとまとめに書くことができることがわかります。
@@ -188,6 +201,7 @@ mainPage page = pageWrapper <| div [ class "main-card"
 これらはelm-html(https://github.com/elm-lang/html)とelm-css(https://github.com/rtfeldman/elm-css)というライブラリを用いる形で記述しています。
 
 @<tt>{div}や@<tt>{img}を始めとしたHTMLの要素を関数として、その属性や子要素を引数として記述していますが、通常のHTMLと同じように読むことも可能な見た目になっているため簡単に記述できます。
+また、@<tt>{pageWrapper}のように引数に他のViewを取ってViewを組み立てるということも可能です。
 
 
 このようにしてModelとView、Updateを定義することによってThe Elm Architectureのアプリケーションを記述することができました。あとは前述のライブラリが提供している@<tt>{Html.program}にこれらの処理と初期状態のモデル等をわたし、それをmain関数とすることによって実際にアプリケーションが動くようになります。
@@ -196,5 +210,8 @@ mainPage page = pageWrapper <| div [ class "main-card"
 この記事では、Elmアプリケーションの流れを一通り追ってみました。この記事でElmに興味を持った方へは、詳しい情報を得るために公式サイト(http://elm-lang.org/)のサンプルコードを読んでみることをおすすめします。
 
 
+Elmはelm-reactorやオンラインエディタ等、試しに使ってみる時へのサポートもしっかりしているのでまずは試しに触ってみるというのもおすすめです！
+
 == 参考文献
-https://guide.elm-lang.org/architecture/
+ * https://guide.elm-lang.org/architecture/
+ * https://matsubara0507.github.io/posts/2017-12-13-elm-and-haskell-for-elmer.htmlhttps://guide.elm-lang.org/architecture/
