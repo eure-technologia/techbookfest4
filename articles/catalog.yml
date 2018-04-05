@@ -2,7 +2,6 @@ PREDEF:
   - preface.re
 
 CHAPS:
-  - satoshin21_swift-nio.re
   - haru2036_elm.re
   - boxp_clojure.re
   - zukkey_groupie.re
@@ -10,6 +9,7 @@ CHAPS:
   - marnie_let_cloud_dataflow.re
   - proguard-for-android.re
   - lemon_blockchain_introduction.re
+  - satoshin21_typography.re
   - takochuu_graphql.re
   - yuyakaido-redux-on-android.re
 #@# TODO: add marine's re
