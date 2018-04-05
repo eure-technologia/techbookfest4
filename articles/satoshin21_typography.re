@@ -132,7 +132,11 @@ iOSでテキストを表示する場合は、`UILabel`や`UITextView`を用い�
 
 UITextView上にテキストを表示する為に、内部では主に3つのクラスを用いてテキストの管理を行っています。
 
-== NSTextStorage
+* NSTextStorage
+* NSTextContainer
+* NSLayoutManager
+
+=== NSTextStorage
 NStextStorageは主に何(テキスト)を表示するかを管理しています。NSMutableAttributedStringのサブクラスで、TextStorageの持つ内容や属性に変更があった場合、それをNSLayoutManagerに通知してテキストの再レイアウトを行うことができます。
 
 UITextViewの.textなどで文字列などを指定する時、TextViewの持つTextStorageを変更します。TextStorageから直接attributesなどを変更する事も可能です。
@@ -155,7 +159,7 @@ textView.text = "bar"
 textView2.text // foo
 //}
 
-== NSTextContainer
+=== NSTextContainer
 NStextContainerはTextStorageが持つ内容をどのように表示するかを管理しています。
 UITextView上に表示するテキストの座標と形状情報を持っています。TextView上のスクロール可能な領域に関するレイアウト情報を持っているようなイメージであり、座標の主な情報は以下のような関係性となっています。
 TextContainerや、TextViewの持つ座標情報は以下のように変更することができます。
@@ -173,7 +177,13 @@ textView.textContainerInset
 textView.textContainerInset = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 10)
 //}
 
-また、TextContainerはNSAttributedStringでカバーできない、テキスト全体の描画方法についても指定することができます。
+UITextView, NSTextStorage(AttributedString), NSTextContainerそれぞれにグリフの座標、及びTextContainerの表示領域に関する座標指定方法がある為、UITextView内を扱う場合は、表示領域とそれぞれの担当領域を判断し、適切な設定を行いましょう。
+
+//image[text_view_margin][各マージン関係性]{
+//}
+
+
+TextContainerはNSAttributedStringでカバーできない、テキスト全体の描画方法についても指定することができます。
 例えば、textContainerにはexclusivePathを持っており、こちらを指定することでTextContainerで表示しない領域をUIBezierPathを用いて指定することが可能です。
 
 //emlist[][]{
@@ -186,8 +196,18 @@ textView.textContainer.exclusionPaths = [triangle]
 //}
 
 //image[text_container][TextContainerの出力]{
-Text Containerの出力
 //}
 
-=== NSLayoutManager
+==== NSLayoutManager
 NSLayoutManagerは上記2つのクラスを保持し、TextStorageの持つ内容をTextContainerの持つ座標・レイアウト情報をもとにTextView上に表示するためのコントロールを行います。
+UITextViewはUIFontから生成されるグリフやスタイル情報をキャッシュし、レイアウト処理に関わるボトルネックを最小限にしています。
+
+NSLayoutManager, NSTextContainer, NSTextStorageの関係性はこのようになっています。
+
+//image[textview][TextViewに関わるクラスの関係性][scale=0.7]{
+//}
+
+== おわりに
+今回はUIFontやUITextViewを中心に、iOSのタイポグラフィに関わる部分についてざっくりとまとめてみました。テキストレイアウトデザインなどはデザイナー領域のように感じられ、それほど関心も高くないかもしれませんが、
+iOS SDKのCoreTextをベースとした各APIはより高度な、且つ柔軟なデザイン要求にも簡単に応えられるような高機能なものがたくさん存在しています。
+タイポグラフィを理解して、デザイナーと一緒に楽しく、そして最高のアプリを作っていきましょう！
