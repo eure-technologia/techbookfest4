@@ -143,7 +143,11 @@ RecyclerViewにタイトルとサブタイトルのついたRecyclerViewを用�
 
 DataBindingを利用しているので<layout>タグで囲ってください。
 
+
+
 次に、このレイアウトを利用したHeaderItemClassを作成していきます。
+
+
 
 参照先URL: @<href>{https://github.com/yutaro6547/GroupieSampleForTechBook/blob/master/app/src/main/java/com/example/suzukihiroshitarou/groupiesamplefortechbook/HeaderItem.kt, GroupieSampleForTechBook/HeaderItem.kt}
 
@@ -173,6 +177,7 @@ Headerの下につけるRecyclerViewのItemクラスを作成していきます�
 
 角丸のImageViewを利用したかったので今回は、@<href>{https://github.com/vinc3m1/RoundedImageView, RoundedImageView}というライブラリを利用しています。
 
+
 次に、このレイアウトを利用したContentItemクラスを作成していきます。
 
 
@@ -184,10 +189,12 @@ Headerの下につけるRecyclerViewのItemクラスを作成していきます�
 ==== Groupクラスを用意する
 今回は、@<href>{https://github.com/lisawray/groupie/blob/master/example/src/main/java/com/xwray/groupie/example/ColumnGroup.kt,公式のサンプル}を利用します。
 
+
 ここまできたら、最後にActivityに追加していきましょう。
 
 ==== Activityで全てのItemをgroupAdapterに追加していく
 全体のソースコードは、@<href>{https://github.com/yutaro6547/GroupieSampleForTechBook/blob/master/app/src/main/java/com/example/suzukihiroshitarou/groupiesamplefortechbook/MainActivity.kt, こちら}にあります。
+
 
 まずは、Groupieの実装に必要なGroupAdapterを定義します。
 今回はカラムが３つのグリッドリストを作成するので次のようにしています。
@@ -230,6 +237,8 @@ ItemDecorationで適宜マージンの調整を行なっています。
 === Groupieを使うことのメリット
 
 公式のREADMEにも書かれていますが、Groupieでは、グループの内容を変更することで自動的に親に通知が届き、通知がGroupAdapterに到達すると変更通知が送られるというメリットがあります。
+
+
 
 これは、Sectionの中のupdate関数を追っていくとよく分かります。公式のコードは次の通りです。
 
@@ -310,25 +319,39 @@ Group毎にItemとその中身のContentの差分を計算してDiffUtilクラ�
 内部的にpositionで比較してくれているので、どんなデータを構成していても手動でindexをよしなにやるという手間を無くしupdate関数を渡すだけで変更があれば差分を変更通知してくれるというメリットが分かります。
 
 
+
 また、GroupieではGroupに必要な機能を自分で実装できるので柔軟にカスタマイズ可能です。
 その際に、SectionまたはNestedGroupを拡張する必要があります。継承することで自由に自分好みのGroupを定義できます。
 
 
-セクションは、diffing、ヘッダー、フッター、プレースホルダーなどの一般的なRecyclerViewの考え方をサポートし、NestedGroupは、グループの任意のネスト、リスナーの登録/登録解除、アニメーションをサポートするための細かい変更通知、およびアダプターの更新をサポートします。
+
+セクションは、diffing、ヘッダー、フッター、プレースホルダーなどの一般的なRecyclerViewの考え方をサポートし、NestedGroupは、グループの任意のネスト、リスナーの登録/登録解除、
+アニメーションをサポートするための細かい変更通知、およびアダプターの更新をサポートしています。
+
 
 
 他にもifまたはwhenの分岐がなくなることによる可読性と拡張性、DataBindingとも相性が良くモデルとViewを簡単に結びつけることが可能になります。
+
+
 
 そして、2018年3月現在も開発がストップしておりません。
 
 === Groupieを使うことのデメリット
 Groupieを使うことのデメリットとしてあげられるのは、すでに確立されている既存のアプリに導入していくのは難しいかもしれません。
+
+
 また、Groupの階層を重ねるとスクロールした際にカクツクことがあります。パフォーマンス面ではまだ改善点があるという懸念点があります。
+
+
 さらに、似たライブラリとしてEpoxyがあり、こちらも開発がストップしておらず勢いも衰えていません。Groupieが押され気味であるのでもしかしたら今後開発がストップする可能性もなくはないという点が懸念されます。
 
 == おわりに
-今回は、Groupieの導入からサンプル作成と触ってみて考えるメリットとデメリットについてでした。
+今回は、Groupieの導入からサンプル作成と私が考えるGroupieのメリットとデメリットについての紹介でした。
+
+
 今回作成したサンプルは以下のリポジトリで見ることができます。
+
+
 @<href>{https://github.com/yutaro6547/GroupieSampleForTechBook, yutaro6547/GroupieSampleForTechBook}
 
 今回Groupieを触ってみて、総じて使いやすく便利なライブラリであると思いますが、Epoxyもあるので今後どちらが主流になっていくのか気になります。
