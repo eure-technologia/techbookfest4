@@ -89,22 +89,28 @@ ProjectRoot/app/build/outputs/
 
 それぞれのファイルの内容は次のようになっています。
 
-* dump.txt：ProGuardを実行した上で作成したapk内のすべてのクラスファイルの内部構造
-* mapping.txt：難読化される前のクラス、メソッド、フィールド名と難読化後の名前間のマッピング
-* seeds.txt：難読化されていないクラスとフィールドのリスト
-* usage.txt：apk内から削除されたコードの一覧
+ * dump.txt：ProGuardを実行した上で作成したapk内のすべてのクラスファイルの内部構造
+ * mapping.txt：難読化される前のクラス、メソッド、フィールド名と難読化後の名前間のマッピング
+ * seeds.txt：難読化されていないクラスとフィールドのリスト
+ * usage.txt：apk内から削除されたコードの一覧
 
 Crashlyticsのようなサードパーティ性のツールを使っている際に、ProGuard実行済みのAndroidアプリでもクラスやメソッドの名前が難読化される前のもので見ることができるのはこれらのtxtファイルを使って難読化前の状態を復元しているからです。
 
 GoogleDeveloperコンソールの場合は開発者が手動でmapping.txtをアップロードすることで解決していますが、Crashlyticsの場合は自動でやってくれています。賢いですね。
 
 === ライブラリ配布時に便利なconsumerProguardFilesの設定
+一般的なAndroidアプリでProGuardを使う場合に必要な最低限の設定は、さきの節で登場した@<em>{proguard-android-optimize.txt}か@<em>{proguard-android.txt}のどちらかを使うことでまかなうことが可能です。
+しかしAndroidアプリ開発ではいくつかのデファクトになっているサードパーティ製のライブラリもあります。これらのライブラリを使っている時のProGuardの設定を利用者側に意識させずにいい感じにできるようにするのが@<em>{consumerProguardFiles}です。
 
-//list[consumerProguardFiles][build.gradle]{
+ライブラリ作成者は@<list>{consumerProGuardFiles}のようにbuild.gradleに書き足すことでproguard-rules.proに記載されているProGuardルールをライブラリ利用者に意識させること無く提供することが可能です。
+
+//list[consumerProGuardFiles][build.gradle]{
 android {
     consumerProguardFiles 'proguard-rules.pro'
 }
 //}
+
+ORMのOrmaはこの設定が記述されていたりします。
 
 == ProGuardを適応したAndroidアプリを作る
 Try And Errorでやっていきます。
