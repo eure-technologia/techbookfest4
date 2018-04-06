@@ -1,10 +1,9 @@
-= ProGurad manual for Android
+= AndroidのためのProGuard入門
 
 == はじめに
 #@# TODO: この章ではどんなことが書かれているのか、なぜ書こうと思ったのかとかを書く
 
 == ProGuardを理解する
-=== ProGuard実行時の流れ
 //image[ProGuard_build_process][ProGuardのステップ一覧]{
     ProGuardのステップ一覧
 //}
@@ -22,8 +21,39 @@ ProGuardは、Javaクラスファイルの圧縮（shrink）、最適化（optim
 //footnote[MIDlet][Java MEで定義されている携帯小型端末向けアプリケーション形式]
 ProGuardはどのコードを変更されないようにするか、またどのコードを削除したり難読化したりすべきかを決定するため、1つかそれ以上のエントリーポイントを指定する必要があります。通常、これらのエントリーポイントは、mainメソッドをもつApplets@<fn>{Applets}、MIDlet@<fn>{MIDlet}、AndroidのActivity、Service、Broadcast Reciver、Content Provider、Custom Application Classなどです。
 
-=== リフレクション
+圧縮（shrink）ステップでは、ProGuardはどのクラスやコードが使用されているのか再帰的にチェックしていく作業をさきに述べたエントリーポイントから開始します。そして使用されていないクラスやコードの全てが破棄されます。@<img>{entory_point}
+//image[entory_point][エントリーポイント]{
+    エントリーポイント
+//}
 
+最適化（optimize）ステップでは、圧縮（shrink）ステップを経たコードを元に最適化が進められます。エントリーポイントではないクラスとメソッドがprivateや、staticや、finalにされたり、使用されていない引数が削除されたり、いくつかのメソッドがインライン化されたりします。
+
+難読化（obfuscate）ステップでは、エントリーポイントではないクラスとクラスメンバーの名前が変更されます。このステップ全体では、エントリーポイントを保持し続けることで変更されたクラスとクラスメンバーが元の名前でアクセス可能であることが保証されています。
+
+事前検証（preverify）ステップだけはエントリーポイントに影響を受けることはありません。
+
+=== リフレクションの対応
+//footnote[リフレクション][実行時にオブジェクトの情報を参照して、それを元にオブジェクトを操作する方法]
+//footnote[イントロスペクション][実行時にオブジェクトの情報を参照して、その情報にさらに変更を加える方法]
+リフレクション@<fn>{リフレクション}やイントロスペクション@<fn>{イントロスペクション}を使用しているコードに対してProGuradを実行する場合、各ステップの実行において問題が発生する場合があります。ProGuardでは、コードの中で動的に作成または実行されるクラスまたはクラスメンバーは、エントリーポイントと同様に事前に指定されている必要があるからです。
+たとえば、@<code>{Class.forName("SomeClass")}メソッドは、実行時に任意のクラスへの参照を返します。コンフィギュレーションファイルからクラス名が読み取らたあとで、その一覧には無いクラスや動的に生成されるクラスのうち、どのクラスやメソッドがProGuardによる処理をされた後の名前になっているのか、どのクラスやメソッドがProGuardによる処理をされておらず、元の名前のままになっているのかということを予測するのは一般的に不可能です。このためProGuardの処理の対象としたくないクラスやクラスメンバーは、@<em>{-keep}オプションにより明確に設定する必要があります。
+
+しかし、次のようなコードの場合にはProGuradの標準の処理によって適切な処理が行われます。
+//list[reflection][リフレクション例]{
+Class.forName("SomeClass")
+SomeClass.class
+SomeClass.class.getField("someField")
+SomeClass.class.getDeclaredField("someField")
+SomeClass.class.getMethod("someMethod", new Class[] {})
+SomeClass.class.getMethod("someMethod", new Class[] { A.class })
+SomeClass.class.getMethod("someMethod", new Class[] { A.class, B.class })
+SomeClass.class.getDeclaredMethod("someMethod", new Class[] {})
+SomeClass.class.getDeclaredMethod("someMethod", new Class[] { A.class })
+SomeClass.class.getDeclaredMethod("someMethod", new Class[] { A.class, B.class })
+AtomicIntegerFieldUpdater.newUpdater(SomeClass.class, "someField")
+AtomicLongFieldUpdater.newUpdater(SomeClass.class, "someField")
+AtomicReferenceFieldUpdater.newUpdater(SomeClass.class, SomeType.class, "someField")
+//}
 
 == Androidアプリ開発におけるProGuardを理解する
 
@@ -40,7 +70,11 @@ android {
 //}
 
 == ProGuardを適応したAndroidアプリを作る
+Try And Errorでやっていきます。
 
 == ProGuradの代わりに開発中のR8について
 
 == おわりに
+
+== 参考URL
+* @<href>{https://www.youtube.com/watch?v=AdfKNgyT438, Best Practices to Slim Down Your App Size（Google I/O '17）}
