@@ -231,11 +231,90 @@ ItemDecorationで適宜マージンの調整を行なっています。
 
 公式のREADMEにも書かれていますが、Groupieでは、グループの内容を変更することで自動的に親に通知が届き、通知がGroupAdapterに到達すると変更通知が送られるので、どんなデータを構成していても、indexで手動通知や追跡を行う必要がないというメリットがあります。
 
+これは、Sectionの中のupdate関数を追っていくとよく分かります。公式のコードは次の通りです。
+
+//emlist[][]{
+  final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+          @Override
+          public int getOldListSize() {
+              return oldBodyItemCount;
+          }
+
+          @Override
+          public int getNewListSize() {
+              return newBodyItemCount;
+          }
+
+          @Override
+          public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+              Item oldItem = getItem(oldBodyGroups, oldItemPosition);
+              Item newItem = getItem(newBodyGroups, newItemPosition);
+              return newItem.isSameAs(oldItem);
+          }
+
+          @Override
+          public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+              Item oldItem = getItem(oldBodyGroups, oldItemPosition);
+              Item newItem = getItem(newBodyGroups, newItemPosition);
+              return newItem.equals(oldItem);
+          }
+
+      @Nullable
+      @Override
+      public Object getChangePayload(int oldItemPosition, int newItemPosition) {
+          Item oldItem = getItem(oldBodyGroups, oldItemPosition);
+          Item newItem = getItem(newBodyGroups, newItemPosition);
+          return oldItem.getChangePayload(newItem);
+      }
+  });
+
+  super.removeAll(children);
+　children.clear();
+　children.addAll(newBodyGroups);
+　super.addAll(newBodyGroups);
+
+　diffResult.dispatchUpdatesTo(listUpdateCallback);
+　if (newBodyItemCount == 0 || oldBodyItemCount == 0) {
+    refreshEmptyState();
+}
+//}
+
+Group毎にItemとその中身のContentの差分を計算してDiffUtilクラスのdispatchUpdatesToにlistUpdateCallbackを投げています。
+次に、ListUpdateCallbackを見ていきましょう。公式は次のとおりです。
+
+//emlist[][]{
+  private ListUpdateCallback listUpdateCallback = new ListUpdateCallback() {
+      @Override
+      public void onInserted(int position, int count) {
+          notifyItemRangeInserted(getHeaderItemCount() + position, count);
+      }
+
+      @Override
+      public void onRemoved(int position, int count) {
+          notifyItemRangeRemoved(getHeaderItemCount() + position, count);
+      }
+
+      @Override
+      public void onMoved(int fromPosition, int toPosition) {
+          final int headerItemCount = getHeaderItemCount();
+          notifyItemMoved(headerItemCount + fromPosition, headerItemCount + toPosition);
+      }
+
+      @Override
+      public void onChanged(int position, int count, Object payload) {
+          notifyItemRangeChanged(getHeaderItemCount() + position, count, payload);
+      }
+  };
+//}
+
+getHeaderItemCount()ではHeaderItemがあればHeaderItemの数を渡し、なければ０を返しています。
+内部的にpositionで比較してくれているので、手動でindexをよしなにやるという手間を無くしupdate関数を渡すだけで変更があれば差分を変更通知してくれるというメリットが分かります。
+
+
 
 また、GroupieではGroupに必要な機能を自分で実装できるので柔軟にカスタマイズすることが可能です。
 
-
-ほとんどの場合は、SectionまたはNestedGroupを拡張する必要があります。
+ほとんどの場合は、SectionまたはNestedGroupを拡張する必要があります。継承することで自由に自分好みのGroupを定義することが可能です。
 
 
 セクションは、diffing、ヘッダー、フッター、プレースホルダーなどの一般的なRecyclerViewの考え方をサポートし、NestedGroupは、グループの任意のネスト、リスナーの登録/登録解除、アニメーションをサポートするための細かい変更通知、およびアダプターの更新をサポートします。
@@ -261,4 +340,4 @@ Groupieを使うことのデメリットとしてあげられるのは、すで�
 また、もっと深いことも今後はやっていき、Epoxyとの違いについても今後探っていきたいなと考えています。
 
 
-@<href>{http://rozkey.hatenablog.com/, "zukkeyの技術奮闘記"}という個人ブログもやっておりますので、よかったら見にきてください。
+@<href>{http://rozkey.hatenablog.com/, "zukkeyの技術奮闘記(http://rozkey.hatenablog.com/)"}という個人ブログもやっておりますので、よかったら見にきてください。
