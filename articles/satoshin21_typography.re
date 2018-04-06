@@ -1,7 +1,7 @@
-= iOSとタイポグラフィと私
+= iOSとタイポグラフィ
 
 == はじめに
-はじめましてこんにちは。株式会社エウレカでiOSエンジニアとして主にUI/UX周りの開発を担当しています、@satoshin21です。
+はじめましてこんにちは。株式会社エウレカでiOSエンジニアとして主にUI/UX周りの開発を担当しています、@<href>{https://twitter.com/satoshin21, @satoshin21}です。
 最近一眼カメラを入手し、とにかくいろんなものを撮っています。大きなカンファレンスのカメラマンとしてデビューする事を夢見てカメラの勉強中です。
 
 == iOSとタイポグラフィ
@@ -47,6 +47,7 @@ font.pointSize  // 12.0
 ===[column] セリフ体
 書体の大きな特徴としてセリフ体、サンセリフ体の2種類があります。
 セリフとは主に欧文フォントで確認できる文字の線の橋につけられる線・飾りのことで、活版印刷が生まれた時はセリフをわざとつけることで文字を刻みつけやすくする為に用いられました。また、サンセリフのサンとは仏語でSans=「〜のない」という意味となり、我々が普段ゴシック体と呼んでいるものとほぼおなじ意味です。
+
 iOSがシステムで保持するフォントはほぼすべてサンセリフ体のものが基本です。これは、一般的にデジタル上で表現されるフォントは、画面の解像度によってアンチエイリアスにより潰れてしまうことが懸念される為とされています。
 
 //image[serif][セリフ体]{
@@ -179,9 +180,8 @@ textView.textContainerInset = UIEdgeInsets(top: 10, left: 20, bottom: 10, right:
 
 UITextView, NSTextStorage(AttributedString), NSTextContainerそれぞれにグリフの座標、及びTextContainerの表示領域に関する座標指定方法がある為、UITextView内を扱う場合は、表示領域とそれぞれの担当領域を判断し、適切な設定を行いましょう。
 
-//image[text_view_margin][各マージン関係性]{
+//image[textview_margins][UItextViewの各種マージン・インセット]{
 //}
-
 
 TextContainerはNSAttributedStringでカバーできない、テキスト全体の描画方法についても指定することができます。
 例えば、textContainerにはexclusivePathを持っており、こちらを指定することでTextContainerで表示しない領域をUIBezierPathを用いて指定することが可能です。
@@ -195,7 +195,10 @@ triangle.close()
 textView.textContainer.exclusionPaths = [triangle]
 //}
 
-//image[text_container][TextContainerの出力]{
+こちらの出力結果が以下となります。
+exclusionPathsで指定した所を抜けてテキストがレイアウトされていることがわかると思います。
+
+//image[text_container][exclusionPath指定時の出力結果]{
 //}
 
 ==== NSLayoutManager
@@ -206,6 +209,9 @@ NSLayoutManager, NSTextContainer, NSTextStorageの関係性はこのようにな
 
 //image[textview][TextViewに関わるクラスの関係性][scale=0.7]{
 //}
+
+UITextViewにはこのように、様々なクラスと連携し、画面上にテキスト表示を可能にしています。
+柔軟なタイポグラフィをiOS上で実現するために、UITextViewは様々なAPIを提供しているため、各クラスの特性を掴み、快適なタイポグラフィを実現しましょう。
 
 == おわりに
 今回はUIFontやUITextViewを中心に、iOSのタイポグラフィに関わる部分についてざっくりとまとめてみました。テキストレイアウトデザインなどはデザイナー領域のように感じられ、それほど関心も高くないかもしれませんが、
