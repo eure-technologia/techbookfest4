@@ -1,7 +1,7 @@
 
 = 第二言語としてのClojure
 
-こんにちは！株式会社エウレカでフロントエンドエンジニアをしているBOXP(@If_I_were_boxp)です。
+こんにちは！株式会社エウレカでフロントエンドエンジニアをしている@<tt>{BOXP(@If_I_were_boxp)}です。
 最近はスキーにどっぷりとハマっており、少し休みが取れるやいなやスキー場へと直行する日々を過ごしています。
 スキーが出来ない夏も充実した日々を過ごすべく、サバゲーの装備を着々と増やしていく毎日です:)
 
@@ -137,9 +137,9 @@ user=>
 
 ClojureのREPLは、コマンドライン上から叩く以外にもエディタやIDEから接続して使用する手段も用意されています。尺の都合上ここでは解説しませんが、本格的に開発をする時は是非そちらを使用してください。
 
-	* Vimを使う場合: vim-fireplace(https://github.com/tpope/vim-fireplace)
-	* Emacsを使う場合: cider(https://github.com/clojure-emacs/cider)
-	* IntelliJを使う場合: Cursive(https://cursive-ide.com/userguide/)
+	* Vimを使う場合: @<tt>{vim-fireplace(https://github.com/tpope/vim-fireplace)}
+	* Emacsを使う場合: @<tt>{cider(https://github.com/clojure-emacs/cider)}
+	* IntelliJを使う場合: @<tt>{Cursive(https://cursive-ide.com/userguide/)}
 
 また、特にこだわりがない場合はSpacemacs(https://github.com/syl20bnr/spacemacs)を使うと快適です。
 
