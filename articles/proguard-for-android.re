@@ -56,10 +56,47 @@ AtomicReferenceFieldUpdater.newUpdater(SomeClass.class, SomeType.class, "someFie
 //}
 
 == Androidアプリ開発におけるProGuardを理解する
+ここまでは一般的なProGuradについて説明してきました。
+ここからはAndroidアプリ開発におけるProGuradについて説明していきたいと思います。
 
 === Androidアプリ向けにデフォルトで用意されているProGuard設定ファイル
+Androidアプリ開発におけるProGuardですが、デフォルトで用意されている設定ファイルがいくつか存在します。
+@<em>{~/AndroidSDK/tools/proguard}配下にある、@<em>{proguard-android-optimize.txt}と@<em>{proguard-android.txt}の2つです。この2つの設定の違いは最適化（optimize）ステップを実行するかどうかの違いがあります。@<em>{proguard-android-optimize.txt}の方には最適化（optimize）ステップを行う際の@<list>{optimize-diff}のような部分が記載されています。
+
+//list[optimize-diff][proguard-android-optimize.txtとproguard-android.txtの差分]{
+-optimizations !code/simplification/arithmetic
+                ,!code/simplification/cast,!field/*,!class/merging/*
+-optimizationpasses 5
+-allowaccessmodification
+//}
+
+@<em>{-optimizations}を追加することで最適化（optimize）ステップを実行します。オプションをつけることで特定の最適化（optimize）のみを実行することや逆に特定の最適化（optimize）を行わない指定も可能です。
+@<list>{optimize-diff}の場合は変数への読み書き、キャストの実行、変数に関わる部分の最適化（書き込みだけの変数の削除）、分岐するが同じ処理をしている部分のマージなどを行わないオプションを指定しています。
+他にもさまざまなオプションがありますのでぜひ@<href>{https://www.guardsquare.com/en/proguard/manual/optimizations, 公式サイト | optimizations}を参考にしてみてください。
+
 
 === ProGuard実行後に作成されるファイル
+AndroidアプリでProGuardを実行するといくつかのtxtファイルが生成されます。実際にbuild.gradleで設定しているproductfFlavorsとbuildTypesの内容によって異なりますが、デフォルトのまま実行している場合は概ね次のようなPathの構成でtxtファイルが生成されるはずです。
+//list[generaeted-txt-files][生成されるtxtファイル一覧]{
+ProjectRoot/app/build/outputs/
+    └── mapping
+        └── debug
+            ├── dump.txt
+            ├── mapping.txt
+            ├── seeds.txt
+            └── usage.txt
+//}
+
+それぞれのファイルの内容は次のようになっています。
+
+* dump.txt：ProGuardを実行した上で作成したapk内のすべてのクラスファイルの内部構造
+* mapping.txt：難読化される前のクラス、メソッド、フィールド名と難読化後の名前間のマッピング
+* seeds.txt：難読化されていないクラスとフィールドのリスト
+* usage.txt：apk内から削除されたコードの一覧
+
+Crashlyticsのようなサードパーティ性のツールを使っている際に、ProGuard実行済みのAndroidアプリでもクラスやメソッドの名前が難読化される前のもので見ることができるのはこれらのtxtファイルを使って難読化前の状態を復元しているからです。
+
+GoogleDeveloperコンソールの場合は開発者が手動でmapping.txtをアップロードすることで解決していますが、Crashlyticsの場合は自動でやってくれています。賢いですね。
 
 === ライブラリ配布時に便利なconsumerProguardFilesの設定
 
