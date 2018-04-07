@@ -13,7 +13,7 @@
 
 == 空前絶後のビッグデータブーム
 
-さてさて、最近流行のワードといえばビッグデータ,機械学習という感じでではないでしょうか？
+さてさて、最近流行のワードといえばビッグデータ,機械学習という感じではないでしょうか？
 サービスの運営における仮説検証を支える分析のための収集や処理、
 機械学習の為のデータ加工などなどニーズは増えていく一方ですね。
 
@@ -21,26 +21,28 @@
 これからデータ基盤を作りたいんだけど、どうしようといった悩みを持っていたり、
 聞いた方もいらっしゃるのではないでしょうか。
 
+#@# [IMO] Google Cloud DataflowとCloudDataflowという書き方があるのでどちらかに統一するようがよさそう
 そんなデータラッシュの風に翻弄されている私が、最近業務で触っていたGoogle Cloud Dataflowの良さやら、
 コードの書き方、などなどをテーマに書いていきたいと思います。
 
 == Cloud DataFlowって?
 
 GoogleCloudPlatformが提供するストリーム/バッチ方式両方をサポートしたデータ処理用のフルマネージドサービスです。
-ApacheBeamを基にしたSDKが提供されており任意のinput(pubsubやmysql,gcs)から得たデータの変換、
-GCS,BigQueryへのデータ流し込みといったいわゆるETL(抽出/変換/データハウス出力)処理を
+ApacheBeamを基にしたSDKが提供されており任意のinput（pubsubやmysql,gcs）から得たデータの変換、
+GCS,BigQueryへのデータ流し込みといったいわゆるETL（抽出/変換/データハウス出力）処理を
 Java,Pythonでプログラムで表現することが可能です。
-(*) 2018/02時点ではストリーム対応はJavaのみ
+#@# [IMO] footnoteというのがRe:View記法にあるのでそれを使うのがよさそう
+（*）2018/02時点ではストリーム対応はJavaのみ
 
 == どんなところがよいの?
 
  * フルマネージドなのでリソース管理がほぼ不要。ワークロードバランスの調整を自動でよしなにやってくれる
- * GCP内の別サービスとの連携が容易(CloudPubSubやBigQuery,GCSのようなDataStoreへのInput/Outputが標準でサポートされている)
+ * GCP内の別サービスとの連携が容易（CloudPubSubやBigQuery,GCSのようなDataStoreへのInput/Outputが標準でサポートされている）
  * 大体の変換や分岐・繰り返し等をプログラミングで表現できる
 
 CloudPubsubからのデータ入力などは実質数行で表現できますし、Window処理や並列処理といった大規模データ処理や分析でニーズの
 あるところもサポートされています。
-国内の大規模サービス(Abema,mercari)でも採用されていたりと、事例も増えてきているのは、事例を求められがちな会社さんとしても
+国内の大規模サービス（Abema,mercari）でも採用されていたりと、事例も増えてきているのは、事例を求められがちな会社さんとしても
 安心できるところですし、料金体系的にも従量課金なので、まずはデータ基盤を作ってみるという
 データ本当に使うんかなぁ、とかいろいろ考えるとSpark Streamingを0から構築しようぜ！とか男気を見せるよりはよっぽど敷居が低くて
 SaaSであるCloudDataFlowの方がこれからデータ処理環境を構築するようなスモールスタートにも適していると思います。
@@ -50,7 +52,7 @@ SaaSであるCloudDataFlowの方がこれからデータ処理環境を構築す
 == 活用方法
 
 いわゆるETL基盤としての活用も勿論可能ですが、同じGCPのサービスであるCloud Pub/Subをメッセージバスとして利用し、
-CloudIoTCoreやCloudEndPoint等と組み合わせる事で,下記の図のように各端末~データストアまでのデータ処理基盤を構築する事も容易です。
+CloudIoTCoreやCloudEndPoint等と組み合わせることで,次の図のように各端末~データストアまでのデータ処理基盤を構築することも容易です。
 
 //image[gcp][Google公式のサンプルアーキテクチャ図]{
 //}
@@ -67,12 +69,12 @@ CloudIoTCoreやCloudEndPoint等と組み合わせる事で,下記の図のよう
 
 はじめにCloudDataFlowAPIの有効化をコンソールから行ってください。
 次にCloudDataFlowの動作には以下が必要となりますので、
-GCS(GoogleCloudStorage)に任意の名前でBucketを作成してください。
+GCS（GoogleCloudStorage）に任意の名前でBucketを作成してください。
 
  * CloudDataFlowが内部的に利用するstaging用のgcsBucketの作成
  * CloudDataFlowが内部的に利用するtemp用のgcsBucketの作成
 
-GCPのアカウントやプロジェクトの設定については準備できている事を前提としています。
+GCPのアカウントやプロジェクトの設定については準備できていることを前提としています。
 
 === 開発環境の準備
 
@@ -110,7 +112,7 @@ DataflowPipelineOptions options = PipelineOptionsFactory.create()
   options.setJobName("sample");
 //}
 
-コマンドラインから値を注入したい場合は以下のような書き方ができます。
+コマンドラインから値を注入したい場合は次のような書き方ができます。
 今回の例ではsubscriptionとtableNameという引数の拡張をしたかったので
 DataflowPipelineOptionsを継承したinterfaceを定義しています。
 
@@ -148,14 +150,14 @@ mvn compile exec:java \
 
 === Dataflow上でのプログラミングを構成する基礎概念
 
-基本的にDataflowのジョブをプログラミングする上では以下の
+基本的にDataflowのジョブをプログラミングする上では次の
 概念を取り扱うことになります。
 
  * PipeLine
 
 処理ジョブを表現するオブジェクト
 基本的にPipeLineに自分の書いた変換処理とPipeLineI/O等の必要な処理を適用して
-ジョブを構築する事になります。
+ジョブを構築することになります。
 
  * PCollection
 
@@ -175,7 +177,7 @@ mvn compile exec:java \
 上の図に書いた３つの動作
 
  * CloudPubSubからのメッセージ読み取り
- * json(string)をBigQueryにoutputする形(BigQueryRow)に変換する
+ * json（string）をBigQueryにoutputする形（BigQueryRow）に変換する
  * BigQuery上のテーブルにロードする
 
 をパイプラインに適用していきます。
@@ -184,14 +186,14 @@ mvn compile exec:java \
 
   // パイプライン（処理するジョブ)オブジェクトを生成
   Pipeline p = Pipeline.create(options);
-  // Outputに使うBigQueryのSchemaObjectの生成、実装は後述
+  // Outputに使うBigQueryのSchemaObjectの生成（実装は後述）
   TableSchema schema = SampleSchemaFactory.create();
   // 処理内容を適用する
   // pubsubのsubscriptionからデータを読み出す
   p.apply(PubsubIO.readStrings().fromSubscription("your pubsub subscription"))
   // 5分間隔のwindowを指定
     .apply(Window.<String>into(FixedWindows.of(Duration.standardMinutes(5))))
-  // pubsubからの入力に対する変換を設定 (実装は後述)
+  // pubsubからの入力に対する変換を設定 （実装は後述）
     .apply(ParDo.of(new BigQueryRowConverter()))
   // BigQueryへの書き込みを設定
      .apply("WriteToBQ", BigQueryIO.writeTableRows()
@@ -199,7 +201,7 @@ mvn compile exec:java \
        .to(TableDestination("dataset_name:table_name","description"))
        // 書き込み先のschemaをObjectで定義して渡す
        .withSchema(schema)
-       // テーブルがなければ作成する(オプション)
+       // テーブルがなければ作成する（オプション）
        .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
        // テーブル末尾にデータを挿入していく（オプション)
        .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND));
@@ -290,7 +292,7 @@ public class SampleSchemaFactory {
 //}
 
 同じjobNameのものはDeployができないので、実運用ではjobのsuffixにtimestampをつけて
-一つ前のJobをDorainで止めて新しいJobを立ち上げるような運用がよいのかなぁと。
+ひとつ前のJobをDorainで止めて新しいJobを立ち上げるような運用がよいのかなぁと。
 仕組み上、新しいジョブのデプロイと古いジョブの入れ替えに必ずダウンタイムが発生するので
 データが常に流れ続けるような物を入力にとる場合はCloudPub/Subのようなデータの滞留が可能な
 メッセージバスで受けてSubscriptionから入力をとるようにする必要があります。
@@ -310,9 +312,9 @@ BigQueryにデータが挿入されていれば動作確認はOKです :)
 
 ==== 動的に出力先を変更する
 
-例えばデータの値によって動的に出力先を振り分けるというようなケースの場合は
+たとえばデータの値によって動的に出力先を振り分けるというようなケースの場合は
 SerializableFunctionをimplementしたカスタムクラスを実装すると実現が容易です。
-下記の例ではデータのタイムスタンプを参照して日別のテーブルへのinsertを実装しています。
+次の例ではデータのタイムスタンプを参照して日別のテーブルへのinsertを実装しています。
 
 //listnum[][PipeLine側のサンプル][java]{
 p.apply(PubsubIO.readStrings().fromSubscription(options.getSubscription()))
@@ -365,13 +367,13 @@ stackdriverにも自動でログが転送されていますので、モニタリ
 //image[log][log画面sample]{
 //}
 
-==== エラー(例外発生)時の挙動
+==== エラー（例外発生）時の挙動
 
-DataflowJobを実行中にExceptionが発生した場合、PubSubにACKを送らないので再度データが取り出される事になります。
-従って
+DataflowJobを実行中にExceptionが発生した場合、PubSubにACKを送らないので再度データが取り出されることになります。
+したがって
 
- - BigQueryへのロード部分等で処理がこけてもPubSubのメッセージが破棄されないので自動でリトライされる(通信レベルでのリトライの考慮は不要)
- - 反面でデータが正しくない場合はPubSubにデータが残り続ける限り、エラーを吐き続ける事になるので、Validationをかけてエラーデータを破棄する等のハンドリングを適切に行う必要があります。(何回かエラーが溢れて涙目になりました。)
+ - BigQueryへのロード部分等で処理がこけてもPubSubのメッセージが破棄されないので自動でリトライされる（通信レベルでのリトライの考慮は不要）
+ - 反面でデータが正しくない場合はPubSubにデータが残り続ける限り、エラーを吐き続けることになるので、Validationをかけてエラーデータを破棄する等のハンドリングを適切に行う必要があります。（何回かエラーが溢れて涙目になりました。）
 
 ==== BigQueryのQuota上限
 
@@ -388,7 +390,7 @@ DataflowJobを実行中にExceptionが発生した場合、PubSubにACKを送ら
 今回CloudDataFlowの使い方や良さについて語ってみました。
 
 GCP内の連携と大雑把な流れを説明したかったので、やや本来の持ち味である
-複数のinputを一つのoutputに加工したり、複数のアウトプットに分岐したり
+複数のinputをひとつのoutputに加工したり、複数のアウトプットに分岐したり
 というところの説明まで至れませんでしたが、github上のwordCountのsampleや
 apacheBeamのリファレンスやSDKのJavaDocを参考にすると理解が進むと思います :)
 
