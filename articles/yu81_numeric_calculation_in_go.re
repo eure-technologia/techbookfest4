@@ -339,5 +339,9 @@ T.B.D
 == 参考文献
 
  * @<href>{https://ja.wikipedia.org/wiki/%E6%95%B0%E5%80%A4%E8%A7%A3%E6%9E%90,数値解析 - Wikipedia}
+ * @<href>{https://ja.wikipedia.org/wiki/%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E7%A9%BA%E9%96%93,ベクトル空間 - Wikipedia}
+ * @<href>{https://ja.wikipedia.org/wiki/%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95,ニュートン法 - Wikipedia}
  * NUMERICAL RECIPES in C[日本語版]
  * @<href>{https://ja.wikibooks.org/wiki/高等学校数学II,WikiBooks 高等学校数学II}
+ * @<href>{https://www.amazon.co.jp/dp/4796112367,数学コメンタール -  山本　茂年, 小川　徹夫, 阿部　雄二, 荒木　重蔵}
+ * @<href>{https://www.amazon.co.jp/dp/4274219631,Pythonによる機械学習入門 - 株式会社システム計画研究所}
