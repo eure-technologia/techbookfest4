@@ -263,16 +263,17 @@ Go言語では最新バージョンの1.10現在、複素数は以下2つの組�
 
   	fmt.Println(*v1.Add(v2))
   	fmt.Println(*v1.Multiply(3.0))
-
   	fmt.Println(*InnerProduct(v1, v2))
 
   	v3 := NewVector([]float64{1.0, 0.0})
   	v4 := NewVector([]float64{0.0, 1.0})
+
   	fmt.Println(*Angle(v3, v4))
   	fmt.Println(*AngleInDegree(v3, v4))
   	fmt.Println(*InnerProduct(v3, v4))
 
   	v5 := NewVector([]float64{math.Cos(math.Pi / 3), math.Sin(math.Pi / 3)})
+
   	fmt.Println(*Angle(v3, v5))
   	fmt.Println(*AngleInDegree(v3, v5))
   	fmt.Println(*InnerProduct(v3, v5))
@@ -292,7 +293,7 @@ f(x) は反復計算を行う際の定義域において微分可能であれば
 微分可能性を要求しているのは、背後にある理論によるものです。
 ある程度ざっくりいうと、f(x)をある点についてテイラー展開を行い解の近似式を得て、それを収束する漸化式とみなすことが多くの場合に可能であるから、ということですが、詳細は省略します。
 
-次に、ニュートン法のサンプル実装を示します。平方根と立方根を求める関数の実装ですが、これをニュートン法として再実装しており、さらにニュートン法の実装は関数とその1次微分を注入可能にしてみました。
+次に、ニュートン法のサンプル実装を示します。平方根と立方根を求める関数の実装ですが、これをニュートン法として再実装しており、さらにニュートン法の実装は関数とその1階微分を注入可能にしてみました。
 
 #@# https://play.golang.org/p/u_YzyeXyZrA
 //list[go-newton-def][Go言語におけるニュートン法の例]{
