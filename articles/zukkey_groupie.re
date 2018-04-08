@@ -106,7 +106,7 @@ DataBindingを使用する場合は、次の2行をappのgradleの中のdependen
 == Groupieを用いてサンプルを作成してみよう
 今回は、簡単なHeaderの付いたRecyclerViewを実装していきます。
 
-サンプルコードのリポジトリは@<href>{https://github.com/yutaro6547/GroupieSampleForTechBook,こちら}になります。
+サンプルコードのリポジトリは@<href>{https://github.com/yutaro6547/GroupieSampleForTechBook,こちら}（https://github.com/yutaro6547/GroupieSampleForTechBook）になります。
 
 実際に作成したサンプルは次のとおりです。
 
@@ -193,7 +193,7 @@ Headerの下につけるRecyclerViewのItemクラスを作成していきます�
 ここまできたら、最後にActivityに追加していきましょう。
 
 ==== Activityで全てのItemをgroupAdapterに追加していく
-全体のソースコードは、@<href>{https://github.com/yutaro6547/GroupieSampleForTechBook/blob/master/app/src/main/java/com/example/suzukihiroshitarou/groupiesamplefortechbook/MainActivity.kt, こちら}にあります。
+全体のソースコードは、@<href>{https://github.com/yutaro6547/GroupieSampleForTechBook/blob/master/app/src/main/java/com/example/suzukihiroshitarou/groupiesamplefortechbook/MainActivity.kt, こちら}（https://github.com/yutaro6547/GroupieSampleForTechBook/blob/master/app/src/main/java/com/example/suzukihiroshitarou/groupiesamplefortechbook/MainActivity.kt）にあります。
 
 
 まずは、Groupieの実装に必要なGroupAdapterを定義します。
@@ -216,7 +216,7 @@ Headerの下につけるRecyclerViewのItemクラスを作成していきます�
     groupAdapter.add(this)
 }
 //}
-cententItem1とcontentItem2は、全体のソースコードを見るとわかるのですが、すでにあらかじめ用意してある画像のarrayから読みだしてリストにしたものをColumnGroupに入れるようにしています。
+cententItem1とcontentItem2は、全体のソースコードを見ると分かるのですが、すでにあらかじめ用意してある画像のarrayから読みだしてリストにしたものをColumnGroupに入れるようにしています。
 
 次に、ActivityのRecyclerViewにgroupAdapterを入れていきます。
 実際のコードは次のとおりです。
@@ -240,7 +240,7 @@ ItemDecorationで適宜マージンの調整を行なっています。
 
 
 
-これは、Sectionの中のupdate関数を追っていくとよく分かります。公式のコードは次の通りです。
+これは、Sectionの中のupdate関数を追っていくとよく分かります。公式のコードは次のとおりです。
 
 //emlist[][]{
   final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
@@ -349,7 +349,7 @@ Groupieを使うことのデメリットとしてあげられるのは、すで�
 今回は、Groupieの導入からサンプル作成と私が考えるGroupieのメリットとデメリットについての紹介でした。
 
 
-今回作成したサンプルは以下のリポジトリで見ることができます。
+今回作成したサンプルは次のリポジトリで見ることができます。
 
 
 @<href>{https://github.com/yutaro6547/GroupieSampleForTechBook, yutaro6547/GroupieSampleForTechBook}
@@ -359,4 +359,4 @@ Groupieを使うことのデメリットとしてあげられるのは、すで�
 また、もっと深いことも今後はやっていき、Epoxyとの違いについても今後探っていきたいなと考えています。
 
 
-@<href>{http://rozkey.hatenablog.com/, "zukkeyの技術奮闘記(http://rozkey.hatenablog.com/)"}という個人ブログもやっておりますので、よかったら見にきてください。
+@<href>{http://rozkey.hatenablog.com/, "zukkeyの技術奮闘記（http://rozkey.hatenablog.com/）"}という個人ブログもやっておりますので、よかったら見にきてください。

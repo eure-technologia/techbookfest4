@@ -2,7 +2,7 @@
 
 == はじめに
 はじめましてこんにちは。株式会社エウレカでiOSエンジニアとして主にUI/UX周りの開発を担当しています、@<href>{https://twitter.com/satoshin21, @satoshin21}です。
-最近一眼カメラを入手し、とにかくいろんなものを撮っています。大きなカンファレンスのカメラマンとしてデビューする事を夢見てカメラの勉強中です。
+最近一眼カメラを入手し、とにかくいろんなものを撮っています。大きなカンファレンスのカメラマンとしてデビューすることを夢見てカメラの勉強中です。
 
 フロントエンド開発において、まったく文字を取り扱わないで1つのアプリケーションやWebページを開発することはほとんどなく、フロント開発と文字は切っても切り離せない関係だと思います。それはもちろん、iOSアプリケーション開発においても同じで、UILabelやUITextViewなどを用いて日々開発を行っていると思います。
 しかし、ただ単純に画像を表示する場合に比べ、（画像のメモリ管理は別として）@<b>{文字をアプリケーションで扱うときはさまざまな問題が発生します。}フォントによってレイアウトが崩れたり、デザイナーの要求に素直に（そしてカッコよく）答えられなかったりなど、なかなか最初の頃は一筋縄ではいきません。
@@ -21,7 +21,7 @@ DTP（DeskTop Publishing）の発達により、人間は膨大な数の文字�
 フォントには文字コードの番号とそれに紐づく文字の形を組み合わせにして保持しています。iOSにおいてUIFontがフォントを表す為のクラスがであり、UIFont上で書体、及び文字の大きさやスタイルその他を指定して1つのフォントオブジェクトを生成し、文字の形を定義します。
 
 ==[column] 活版とフォントとグリフの関係性
-活版とフォントとは、それぞれ文字の形をどのように定義するかを表す方法であり、書体はどちらかというと文字のまとまりを表す概念上の言葉です。なので、@<b>{基本的には書体はフォントであり、活版である}といえます。グリフはフォントそれぞれが持つ文字の形の事をグリフといいます。
+活版とフォントとは、それぞれ文字の形をどのように定義するかを表す方法であり、書体はどちらかというと文字のまとまりを表す概念上の言葉です。なので、@<b>{基本的には書体はフォントであり、活版である}といえます。グリフはフォントそれぞれがもつ文字の形のことをグリフといいます。
 
 == UIFont
 
@@ -29,7 +29,7 @@ UIFontにはフォントに関係するさまざまな情報が含まれます�
 
 === フォントの形を表す情報
 
-フォントの形を表す情報としてUIFontでは主に、フォント名、フォントファミリー名、ポイントサイズを取得することができます。フォントは基本的には一つのフォントファミリーに属しています。フォントファミリーは基本的な書体は一つとして、それらに太字やイタリック書体など、様々なスタイルを定義したものをフォントファミリーに所属するフォントとしてそれぞれ保持しています。上記のスタイル以外にも、例えばHelvetica Neueが持つHelveticaNeue-CondensedBold、HelveticaNeue-Lightなどの様々なスタイルを持つフォントが存在します。
+フォントの形を表す情報としてUIFontでは主に、フォント名、フォントファミリー名、ポイントサイズを取得することができます。フォントは基本的にはひとつのフォントファミリーに属しています。フォントファミリーは基本的な書体はひとつとして、それらに太字やイタリック書体など、さまざまなスタイルを定義したものをフォントファミリーに所属するフォントとしてそれぞれ保持しています。上記のスタイル以外にも、たとえばHelvetica NeueがもつHelveticaNeue-CondensedBold、HelveticaNeue-Lightなどのさまざまなスタイルをもつフォントが存在します。
 
 iOSでも、UIFontからフォント名などの情報を取得することが可能です。
 
@@ -50,8 +50,8 @@ iOSがシステムで保持するフォントはほぼすべてサンセリフ�
 //}
 
 === フォントの位置、高さの情報
-フォントは同じポイントサイズでも、大きさや表示位置が様々です。フォントの高さは各フォントに依存し、また欧文フォントではある一定のラインに即してグリフが規則正しく表示されています。
-iOSで取得できる主な高さ、位置情報は以下のようになっています。
+フォントは同じポイントサイズでも、大きさや表示位置がさまざまです。フォントの高さは各フォントに依存し、また欧文フォントではある一定のラインに即してグリフが規則正しく表示されています。
+iOSで取得できる主な高さ、位置情報は@<img>{font_heights}のようになっています。
 
 //image[font_heights][iOSで取得できる高さ情報]{
 //}
@@ -80,28 +80,28 @@ baselineを基準に小文字xの高さを表します。
 基本的に大文字の大きさはcap heightと同じになりますが、フォントによってははみ出てしまう場合があります。
 
 ==== ascender
-フォントによってはcap heightを上回る高さを持つグリフが存在する為、それらを含めた高さを表す為の数値です。
+フォントによってはcap heightを上回る高さをもつグリフが存在する為、それらを含めた高さを表す為の数値です。
 
 ==== descender
 小文字のyやgなど、baselineの下部にグリフが配置される場合があります。それらの下回る部分の高さのことをdescenderといいます。
 iOSから取得できるdescenderはマイナス値となっている為、注意が必要です。
 
-=== UIFontが持つ情報
+=== UIFontがもつ情報
 上記の情報はUIFontに含まれていますが、iOSのUIFontには、それらに合わせて以下2つの情報が含まれています。
 
-==== Line Gap(leading)
-フォントの持つ行間の高さを表す値です。UIFontの持つleadingプロパティから取得できますが、実際にUIFontに指定されているフォントは限られており、
+==== Line Gap（leading）
+フォントのもつ行間の高さを表す値です。UIFontのもつleadingプロパティから取得できますが、実際にUIFontに指定されているフォントは限られており、
 基本的には値が"0"となっています。leading値が確認できたフォントはHiraKakuProN-W3などがあります。
 
 ==== line height
 ascenderとdescenderをあわせた高さ、実際のフォントの高さを表す・・はずですが、フォントによっては、line heightがフォント全てを表さない場合もあります。
 
-こちらが、HiraKakuProNとSan Francisco(SF Pro Display)のbaselineとの位置関係を比べた図です。こちらの図ではleadingを表示していない為、HiraKakuProNでは、小文字のjがdescenderを上回ってしまっていることがわかるかと思います。
+こちらが、HiraKakuProNとSan Francisco（SF Pro Display）のbaselineとの位置関係を比べた図です。こちらの図ではleadingを表示していない為、HiraKakuProNでは、小文字のjがdescenderを上回ってしまっていることが分かるかと思います。
 
-//image[font_leading_compare][2つのフォントと位置関係(Line Gap無し)]{
+//image[font_leading_compare][2つのフォントと位置関係（Line Gap無し）]{
 //}
 
-そのためHiraKakuProN-W3などは、line heightを超えてしまうLine Gapを含めないと実際のフォントの高さとなりません。その為、iOSにおいてフォントの持つ正確な1行分の高さを取得する場合は、Line Gapを含めて計算する必要があります。
+そのためHiraKakuProN-W3などは、line heightを超えてしまうLine Gapを含めないと実際のフォントの高さとなりません。その為、iOSにおいてフォントのもつ正確な1行分の高さを取得する場合は、Line Gapを含めて計算する必要があります。
 
 //emlist[][]{
 let font = UIFont(name: "HiraKakuProN-W3", size: 12)!
@@ -129,9 +129,9 @@ iOSでテキストを表示する場合は、UILabelやUITextViewを用いるか
 UITextView上にテキストを表示する為に、内部では主にNSTextStorage, NSTextContainer, NSLayoutManagerの3つのクラスを用いてテキストの管理を行っています。
 
 === NSTextStorage
-@<b>{NStextStorageは主に何（テキスト）を表示するかを管理}しています。NSMutableAttributedStringのサブクラスで、NSTextStorageの持つ内容や属性に変更があった場合、それをNSLayoutManagerに通知してテキストの再レイアウトを行うことができます。
+@<b>{NStextStorageは主に何（テキスト）を表示するかを管理}しています。NSMutableAttributedStringのサブクラスで、NSTextStorageのもつ内容や属性に変更があった場合、それをNSLayoutManagerに通知してテキストの再レイアウトを行うことができます。
 
-UITextViewの @<code>{ textView.text = "foo" }などで文字列などを指定する時、TextViewは自身が持つNSTextStorageを変更します。NSTextStorageから直接attributesなどを変更する事も可能です。
+UITextViewの @<code>{ textView.text = "foo" }などで文字列などを指定する時、TextViewは自身がもつNSTextStorageを変更します。NSTextStorageから直接attributesなどを変更することも可能です。
 
 //emlist[][]{
 textView.textStorage.beginEditing()
@@ -142,7 +142,7 @@ textView.textStorage.endEditing()
 //}
 
 また、NSTextStorageは複数のNSLayoutManagerを通知先として保持することができます。
-1つのUITextViewの編集内容を別のUITextViewに反映したい場合、NSLayoutManagerを渡すことで別のUITextViewへその変更を反映させる事もできます。ただし、NSLayoutManager経由では通知先のNSTextStorageには変更が走らない為、あくまで変更内容がレイアウト上に反映されるだけなので注意が必要です。
+1つのUITextViewの編集内容を別のUITextViewに反映したい場合、NSLayoutManagerを渡すことで別のUITextViewへその変更を反映させることもできます。ただし、NSLayoutManager経由では通知先のNSTextStorageには変更が走らない為、あくまで変更内容がレイアウト上に反映されるだけなので注意が必要です。
 
 //emlist[addLayoutManager][swift]{
 textView2.text = "foo"
@@ -153,13 +153,13 @@ textView2.text // textView2の表示は"bar"となっているが、"foo"が返�
 //}
 
 === NSTextContainer
-@<b>{NSTextContainerはNSTextStorageが持つ内容をどのように表示するかを管理}しています。
-UITextView上に表示するテキストの座標と形状情報を持っています。UITextView上のスクロール可能な領域に関するレイアウト情報を持っているようなイメージで、座標の主な情報は以下のような関係性となっています。
+@<b>{NSTextContainerはNSTextStorageがもつ内容をどのように表示するかを管理}しています。
+UITextView上に表示するテキストの座標と形状情報を持っています。UITextView上のスクロール可能な領域に関するレイアウト情報を持っているようなイメージで、座標の主な情報は@<img>{textview_margins}ような関係性となっています。
 
 //image[textview_margins][UItextViewの各種マージン・インセット]{
 //}
 
-NSTextContainerや、UITextViewの持つ座標情報は以下のように変更することができます。
+NSTextContainerや、UITextViewのもつ座標情報は次のように変更することができます。
 
 //emlist[][]{
 let paragraphStyle = NSMutableParagraphStyle()
@@ -176,10 +176,10 @@ textView.textContainerInset = UIEdgeInsets(
     right: 10)
 //}
 
-UITextView, NSTextStorage(AttributedString), NSTextContainerそれぞれにグリフの座標、及びTextContainerの表示領域に関する座標指定方法がある為、UITextView内を扱う場合は、表示領域とそれぞれの担当領域を判断し、適切な設定を行いましょう。
+UITextView, NSTextStorage（AttributedString）, NSTextContainerそれぞれにグリフの座標、及びTextContainerの表示領域に関する座標指定方法がある為、UITextView内を扱う場合は、表示領域とそれぞれの担当領域を判断し、適切な設定を行いましょう。
 
 またNSTextContainerはNSAttributedStringでカバーできない、テキスト全体の描画方法についても指定することができます。
-例えば、NSTextContainerにはexclusionPathsを持っており、こちらを指定することでNSTextContainerで表示しない領域をUIBezierPathを用いて指定することが可能です。
+たとえば、NSTextContainerにはexclusionPathsを持っており、こちらを指定することでNSTextContainerで表示しない領域をUIBezierPathを用いて指定することが可能です。
 
 //emlist[][]{
 let triangle = UIBezierPath()
@@ -192,13 +192,13 @@ textView.textContainer.exclusionPaths = [triangle]
 //}
 
 こちらの出力結果が以下となります。
-exclusionPathsで指定した所を抜けてテキストがレイアウトされていることがわかると思います。
+exclusionPathsで指定した所を抜けてテキストがレイアウトされていることが分かると思います。
 
 //image[text_container][exclusionPath指定時の出力結果]{
 //}
 
 === NSLayoutManager
-NSLayoutManagerは上記2つのクラスを保持し、NSTextStorageの持つ内容をNSTextContainerの持つ座標・レイアウト情報をもとにUITextView上に表示するためのコントロールを行います。
+NSLayoutManagerは上記2つのクラスを保持し、NSTextStorageのもつ内容をNSTextContainerのもつ座標・レイアウト情報をもとにUITextView上に表示するためのコントロールを行います。
 UITextViewはUIFontから生成されるグリフやスタイル情報をキャッシュし、レイアウト処理に関わるボトルネックを最小限にしています。
 
 NSLayoutManager, NSTextContainer, NSTextStorageの関係性はこのようになっています。
@@ -206,8 +206,8 @@ NSLayoutManager, NSTextContainer, NSTextStorageの関係性はこのようにな
 //image[textview][TextViewに関わるクラスの関係性][scale=0.5]{
 //}
 
-UITextViewにはこのように、様々なクラスと連携し、画面上にテキスト表示を可能にしています。
-柔軟なタイポグラフィをiOS上で実現するためにUITextViewは様々なAPIを提供しているため、各クラスの特性を掴み快適なタイポグラフィを実現しましょう。
+UITextViewにはこのように、さまざまなクラスと連携し、画面上にテキスト表示を可能にしています。
+柔軟なタイポグラフィをiOS上で実現するためにUITextViewはさまざまなAPIを提供しているため、各クラスの特性を掴み快適なタイポグラフィを実現しましょう。
 
 == おわりに
 今回はUIFontやUITextViewを中心に、iOSのタイポグラフィに関わる部分についてざっくりとまとめてみました。テキストレイアウトなどはデザイナー領域のように感じられ、それほど関心も高くないかもしれませんが、

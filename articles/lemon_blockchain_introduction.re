@@ -23,11 +23,10 @@
 
 
 ブロックは、[取引情報 + 前のブロックのハッシュ値 + TimeStamp] というデータ構造になっています。
-
-
 次のような特徴があります。
-* 1. 改竄できない
-* 2. 中央集権化を防げる
+
+ 1. 改竄できない
+ 2. 中央集権化を防げる
 
 1.は、上記の取引情報のブロックが必ず前のブロックに紐づいたハッシュ値を持っているという部分からきています。
 一度送信され台帳に書き込まれたものは後から取り外すことはできないのです。
@@ -39,7 +38,8 @@
 
 === スマートコントラクト
 それぞれのブロック上に書き込まれる情報や、取引の処理は「スマートコントラクト」と呼ばれ、いわゆるブロックチェーンにおけるアプリケーション層となっています。
-上の図に記したように、スマートコントラクトによってトランザクション（tx）の情報が作成・更新され、それが台帳に書き込まれます。どういったデータや取引を書き込むのか、ビジネスロジックなどを示したものがスマートコントラクトに当たります。
+@<img>{Smart_Contract}に記したように、スマートコントラクトによってトランザクション（tx）の情報が作成・更新され、それが台帳に書き込まれます。
+どういったデータや取引を書き込むのか、ビジネスロジックなどを示したものがスマートコントラクトに当たります。
 
 === トランザクション
 台帳状に書き込まれる一連の手続きを含んでいる処理のことを指します。
@@ -61,9 +61,10 @@ Linux Foundationが主導する、Hyperledgerプロジェクトと呼ばれる�
 
 
 Hyperledgerは分散台帳の共通規格として構想され、実装されたものはいくつかあります。
-1. Hyperledger Fabric（IBM）
-2. Hyperledger Sawtooth（Intel）
-3. Hyperledger Iroha （Soramitsu）
+
+ 1. Hyperledger Fabric（IBM）
+ 2. Hyperledger Sawtooth（Intel）
+ 3. Hyperledger Iroha （Soramitsu）
 
 今回はこの中でもおそらく一番メジャーなHyperledger Fabricを使った環境構築と、
 サンプルを使ったアプリケーションの実装をやってみましょう。
@@ -73,10 +74,11 @@ HyperledgerFabricでは、スマートコントラクトを「チェーンコー
 チェーンコードはGo, Typescript（Javascript）などに対応しています。
 
 定義しなければいけない処理としては
-* どういう資産をブロックチェーン上で管理するのか
-* スマートコントラクト上に参加する人
-* ビジネスロジック部分
-* アクセス権限
+
+ * どういう資産をブロックチェーン上で管理するのか
+ * スマートコントラクト上に参加する人
+ * ビジネスロジック部分
+ * アクセス権限
 
 といったものになります。
 どういうユーザーがブロックチェーン上の情報を取れて取れないのかとか、
@@ -89,9 +91,9 @@ HyperledgerFabricでは、スマートコントラクトを「チェーンコー
 
 === 環境構築（Node）
 Hyperledger FabricとHyperledger Composerの両方を構築し、簡単にプレイグランドで遊ぶところから始めましょう。
-対象は*Mac OS*としています。
+対象は@<em>{Mac OS}としています。
 
-(この項では、2018/ 03 時点でのComposerとFabricのインストールガイドを参考に作成しています）
+（この項では、2018/ 03 時点でのComposerとFabricのインストールガイドを参考に作成しています）
 Composerの使用には、nodeが必要です。バージョンを指定できるよう、Node Version Managerをインストールしておきましょう。
 
 //cmd{
@@ -99,7 +101,7 @@ Composerの使用には、nodeが必要です。バージョンを指定でき�
 //}
 
 この際、GitがはじめてであればXcode Command Line Toolのインストールが求められることがあります。
-Xcodeをインストールしたことがあれば入っていると思いますが、求められる場合はInstallという選択をタップして先に勧めてください
+Xcodeをインストールしたことがあれば入っていると思いますが、求められる場合はInstallという選択をタップして先に進めてください。
 
 //cmd{
   touch .bash_profile
@@ -151,7 +153,7 @@ Hyperledgerの環境にはDockerが必要です。
 
 よりインストールしてください。
 加えて、Visual Studio Codeには、Hyperledger Composer用の拡張機能が提供されています。
-左の拡張機能ボタンより`Hyperledger Composer Extension`で検索してインストールしておきましょう。
+左の拡張機能ボタンより@<code>{Hyperledger Composer Extension}で検索してインストールしておきましょう。
 
 === 環境構築（Hyperledger Composer）
 まずはComposerのCLIを入れましょう
@@ -214,8 +216,7 @@ composer-playground
 
 Hyperledger Composerでは、Business Network Cardを作って、Hyperledger Fabric環境にデプロイすることができます。実際にはBusiness Network Archiveファイルというのを作ります。
 
-//image[composer01][]{
-
+//image[composer01][Business Network Archive]{
 //}
 
 Business Network Archiveファイルは、上の図のように四つのファイルからなるものです。アセット情報、ユーザー情報を含めたモデル、ビジネスロジック、アクセス制御ファイル、あとはクエリです。
@@ -258,16 +259,17 @@ transaction ChangeAssetValue {
 
 こちらは、モデル定義ファイルです。記法が特殊ですが、これはHyperledger Composer独自のモデル言語です。
 CTOファイルは3つの要素からなります。
-1. ひとつのネームスペースで囲われていること
-2. 資産、それに関わる人物、処理、イベントの定義
-3. 他のネームスペースからの定義を取り込む
+
+ 1. ひとつのネームスペースで囲われていること
+ 2. 資産、それに関わる人物、処理、イベントの定義
+ 3. 他のネームスペースからの定義を取り込む
 
 Asset/ Participantはそれぞれを識別するIDを指定してあげる必要があり、transaction/ eventはその必要がありません。
 そのため、participant/ assetのみ by ~ がついています。
 
 
 
-//list[logic.js][ビジネスロジックを各ファイル][js]{
+//list[logic.js][ビジネスロジックを書くファイル][js]{
 'use strict';
 /**
  * Write your transction processor functions here
@@ -308,7 +310,7 @@ function onChangeAssetValue(changeAssetValue) {
 composer archive create -t dir -n .
 //}
 
-Composerによってアーカイブファイル(.bna)が作成されます。
+Composerによってアーカイブファイル（.bna）が作成されます。
 次に、作成されたビジネスネットワークカードをどのユーザー権限でFabricにデプロイできるようにするかを設定してinstall処理を行います。
 最初に作成したユーザーを使ってこのアーカイブされたファイルをいれましょう
 //cmd{
@@ -361,7 +363,7 @@ SampleAssetsについても同様に作成しましょう。
 //}
 
 このビジネスネットワーク上で発生したトランザクションは、左のAll Transactionよりみることができます。
-アセット(Userとか)の追加処理、ビジネスロジックの更新、定義したトランザクション処理（ここではChangeAssetValue）が発生していることがわかりますね。
+アセット（Userとか）の追加処理、ビジネスロジックの更新、定義したトランザクション処理（ここではChangeAssetValue）が発生していることがわかりますね。
 
 また、上タブのDefineからは実際のビジネスロジック
 モデル定義を更新することができます。
@@ -373,7 +375,7 @@ SampleAssetsについても同様に作成しましょう。
 
 ComposerにはモデルファイルからRest APIを自動生成する便利な機能があります。
 
-作成したフォルダ内(4章のmy_first_business_network)のルートで次のコマンドを実行して見てください。
+作成したフォルダ内（4章のmy_first_business_network）のルートで次のコマンドを実行して見てください。
 //cmd{
 composer-rest-server
 //}
@@ -442,7 +444,9 @@ npm run dev
 //}
 
 HttpClientにはAxiosを使いますので追加しましょう
-`npm install —save axios`
+//cmd{
+npm install —save axios
+//}
 
 Vuejsでは、.`vue`ファイルの編集を通してコンポーネントの開発を進めていきます。
 サンプルで生成されたComposerのAPIを使ってAssetsの取得と更新を行える画面の実装をやってみましょう。
@@ -570,7 +574,7 @@ Helloworkd.vueを次のように修正してみましょう
 
 コード中のlocalhostのポートは適宜読み替えてください。
 
-コードはgistに上がってます(https://gist.github.com/KawabataLemon/)
+コードはgistに上がってます（https://gist.github.com/KawabataLemon/）
 
 //image[vue-assets-update][アセット更新画面]{
 //}
