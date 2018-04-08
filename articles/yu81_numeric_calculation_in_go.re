@@ -280,7 +280,50 @@ Go言語では最新バージョンの1.10現在、複素数は以下2つの組�
 サンプルコードについては力尽きたのでまたいずれ……。
 
 === ニュートン法
-T.B.D
+
+//list[go-newton-def][Go言語におけるニュートン法の例]{
+  package main
+
+  import (
+  	"fmt"
+  	"math"
+  )
+
+  func CubicRoot(v float64) float64 {
+  	e := func(x float64) float64 { return x*x*x - v } // f(x) = x^3 -v = 0
+  	d := func(x float64) float64 { return 3 * x * x } // f'(x) = 3x^2
+  	return Newton(e, d, v)
+  }
+
+  func SquareRoot(v float64) float64 {
+  	e := func(x float64) float64 { return x*x - v } // f(x) = x^2 -v = 0
+  	d := func(x float64) float64 { return 2 * x }   // f'(x) = 2x
+  	return Newton(e, d, v)
+  }
+
+  func Newton(equation func(x float64) float64, derivative func(x float64) float64, initial float64) float64 {
+  	z := initial
+  	const (
+  		maxLoopCount        = 10000
+  		convergenceCriteria = 0.0000000001
+  	)
+  	for i := 0; i < maxLoopCount; i++ {
+  		previous := z
+  		z = z - equation(z)/derivative(z)
+  		diff := math.Abs(z - previous)
+  		if diff <= convergenceCriteria {
+  			break
+  		}
+  	}
+  	return z
+  }
+
+  func main() {
+  	fmt.Println(SquareRoot(2))
+  	fmt.Println(CubicRoot(2))
+  }
+//}
+
 
 == 実際に書いてみてから、再び他言語との比較
 T.B.D
