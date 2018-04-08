@@ -318,7 +318,7 @@ f(x) は反復計算を行う際の定義域において微分可能であれば
   	z := initial
   	const (
   		maxLoopCount        = 10000
-  		convergenceCriteria = 0.0000000001
+  		convergenceCriteria = 0.00000001
   	)
   	for i := 0; i < maxLoopCount; i++ {
   		previous := z
