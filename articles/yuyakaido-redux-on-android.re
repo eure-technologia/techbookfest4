@@ -99,38 +99,38 @@ AppStateの変更を担当するクラスとして、AppReducerを定義しま�
 
 //emlist[][]{
 class AppReducer : Reducer<AppState, Action>() {
-    private val counterReducer = CounterReducer()
-    private val todoReducer = TodoReducer()
-    override fun apply(state: AppState, action: Action): AppState {
-        return when (action) {
-            is CounterAction -> {
-                state.copy(counter = counterReducer.apply(state.counter, action))
-            }
-            is TodoAction -> {
-                state.copy(todo = todoReducer.apply(state.todo, action))
-            }
-            else -> state
-        }
+  private val counterReducer = CounterReducer()
+  private val todoReducer = TodoReducer()
+  override fun apply(state: AppState, action: Action): AppState {
+    return when (action) {
+      is CounterAction -> {
+        state.copy(counter = counterReducer.apply(state.counter, action))
+      }
+      is TodoAction -> {
+        state.copy(todo = todoReducer.apply(state.todo, action))
+      }
+      else -> state
     }
+  }
 }
 
 class CounterReducer : Reducer<CounterState, CounterAction>() {
-    override fun apply(state: CounterState, action: CounterAction): CounterState {
-        return when (action) {
-            is CounterAction.Increment -> state.copy(count = state.count + 1)
-            is CounterAction.Decrement -> state.copy(count = state.count - 1)
-            is CounterAction.Reset -> CounterState.initial()
-        }
+  override fun apply(state: CounterState, action: CounterAction): CounterState {
+    return when (action) {
+      is CounterAction.Increment -> state.copy(count = state.count + 1)
+      is CounterAction.Decrement -> state.copy(count = state.count - 1)
+      is CounterAction.Reset -> CounterState.initial()
     }
+  }
 }
 
 class TodoReducer : Reducer<TodoState, TodoAction>() {
-    override fun apply(state: TodoState, action: TodoAction): TodoState {
-        return when (action) {
-            is TodoAction.Add -> state.copy(todos = state.todos.plus(action.todo))
-            is TodoAction.Reset -> TodoState.initial()
-        }
+  override fun apply(state: TodoState, action: TodoAction): TodoState {
+    return when (action) {
+      is TodoAction.Add -> state.copy(todos = state.todos.plus(action.todo))
+      is TodoAction.Reset -> TodoState.initial()
     }
+  }
 }
 //}
 
@@ -142,8 +142,8 @@ AppStateを保持し、変更通知を担当するクラスとして、AppStore�
 
 //emlist[][]{
 class AppStore(
-	initial: AppState,
-    reducer: Reducer<AppState, Action>
+  initial: AppState,
+  reducer: Reducer<AppState, Action>
 ) : Store<AppState, Action>(initial, reducer)
 //}
 
@@ -151,22 +151,22 @@ AppStoreの処理は親クラスであるStoreで実装されています。
 
 //emlist[][]{
 abstract class Store<STATE>(
-	initial: STATE,
-	private val reducer: Reducer<STATE, Action>
+  initial: STATE,
+  private val reducer: Reducer<STATE, Action>
 ) {
-    private val state = BehaviorRelay.createDefault(initial)
-    fun getState(): Observable<STATE> {
-        return state
-    }
-    fun dispatch(action: Action): Observable<Action> {
-        return Observable.just(action)
-                // 事前処理
-                .doOnNext {
-                    val newState = reducer.apply(state.value, it)
-                    Handler(Looper.getMainLooper()).post { state.accept(newState) }
-                }
-				// 事後処理
-    }
+  private val state = BehaviorRelay.createDefault(initial)
+  fun getState(): Observable<STATE> {
+    return state
+  }
+  fun dispatch(action: Action): Observable<Action> {
+    return Observable.just(action)
+        // （省略）事前処理
+        .doOnNext {
+          val newState = reducer.apply(state.value, it)
+          Handler(Looper.getMainLooper()).post { state.accept(newState) }
+        }
+        // （省略）事後処理
+  }
 }
 //}
 
@@ -180,8 +180,8 @@ MiddlewareはActionの前後に割り込むことから、以下のようなイ�
 
 //emlist[][]{
 interface Middleware {
-    fun before(action: Action): Observable<Action>
-    fun after(action: Action): Observable<Action>
+  fun before(action: Action): Observable<Action>
+  fun after(action: Action): Observable<Action>
 }
 //}
 
@@ -190,27 +190,27 @@ interface Middleware {
 //emlist[][]{
 // ログを出力するMiddleware
 class LoggerMiddleware : Middleware {
-    override fun before(action: Action): Observable<Action> {
-        Log.d("LoggerMiddleware", "Before dispatch: $action")
-        return Observable.just(action)
-    }
-    override fun after(action: Action): Observable<Action> {
-        Log.d("LoggerMiddleware", "After dispatch: $action")
-        return Observable.just(action)
-    }
+  override fun before(action: Action): Observable<Action> {
+    Log.d("LoggerMiddleware", "Before dispatch: $action")
+    return Observable.just(action)
+  }
+  override fun after(action: Action): Observable<Action> {
+    Log.d("LoggerMiddleware", "After dispatch: $action")
+    return Observable.just(action)
+  }
 }
 // 非同期処理を実行するMiddleware
 class ThunkMiddleware : Middleware {
-    override fun before(action: Action): Observable<Action> {
-        return if (action is AsyncAction) {
-            action.execute()
-        } else {
-            Observable.just(action)
-        }
+  override fun before(action: Action): Observable<Action> {
+    return if (action is AsyncAction) {
+      action.execute()
+    } else {
+      Observable.just(action)
     }
-    override fun after(action: Action): Observable<Action> {
-        return Observable.just(action)
-    }
+  }
+  override fun after(action: Action): Observable<Action> {
+    return Observable.just(action)
+  }
 }
 //}
 
@@ -218,27 +218,27 @@ MiddlewareはActionが実行される前後で作用することから、 Store�
 
 //emlist[][]{
 private fun dispatch(action: Action): Observable<Action> {
-    return Observable.just(action)
-            .flatMap {
-                var observable = Observable.just(it)
-                for (middleware in middlewares) {
-                    observable = observable
-                            .flatMap { middleware.before(it) }
-                }
-                observable
-            }
-            .doOnNext {
-                val newState = reducer.apply(state.value, it)
-                Handler(Looper.getMainLooper()).post { state.accept(newState) }
-            }
-            .flatMap {
-                var observable = Observable.just(it)
-                for (middleware in middlewares) {
-                    observable = observable
-                            .flatMap { middleware.after(it) }
-                }
-                observable
-            }
+  return Observable.just(action)
+      .flatMap {
+        var observable = Observable.just(it)
+        for (middleware in middlewares) {
+          observable = observable
+              .flatMap { middleware.before(it) }
+        }
+        observable
+      }
+      .doOnNext {
+        val newState = reducer.apply(state.value, it)
+        Handler(Looper.getMainLooper()).post { state.accept(newState) }
+      }
+      .flatMap {
+        var observable = Observable.just(it)
+        for (middleware in middlewares) {
+          observable = observable
+              .flatMap { middleware.after(it) }
+        }
+        observable
+      }
 }
 //}
 
@@ -250,14 +250,14 @@ private fun dispatch(action: Action): Observable<Action> {
 
 //emlist[][]{
 sealed class CounterAction : Action {
-    class Increment : CounterAction()
-    class Decrement : CounterAction()
-    class Reset : CounterAction()
+  class Increment : CounterAction()
+  class Decrement : CounterAction()
+  class Reset : CounterAction()
 }
 
 sealed class TodoAction : Action {
-    class Add(val todo: Todo) : TodoAction()
-    class Reset : TodoAction()
+  class Add(val todo: Todo) : TodoAction()
+  class Reset : TodoAction()
 }
 //}
 
@@ -274,8 +274,8 @@ Storeが保持する状態を監視するためには、getStateメソッドを�
 
 //emlist[][]{
 store.getState()
-	.map { it.counter.count.toString() }
-	.subscribe(binding.textView.text())
+    .map { it.counter.count.toString() }
+    .subscribe(binding.textView.text())
 //}
 
 == まとめ
