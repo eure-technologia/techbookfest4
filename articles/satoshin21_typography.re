@@ -197,7 +197,7 @@ exclusionPathsで指定した所を抜けてテキストがレイアウトされ
 //image[text_container][exclusionPath指定時の出力結果]{
 //}
 
-==== NSLayoutManager
+=== NSLayoutManager
 NSLayoutManagerは上記2つのクラスを保持し、NSTextStorageの持つ内容をNSTextContainerの持つ座標・レイアウト情報をもとにUITextView上に表示するためのコントロールを行います。
 UITextViewはUIFontから生成されるグリフやスタイル情報をキャッシュし、レイアウト処理に関わるボトルネックを最小限にしています。
 
