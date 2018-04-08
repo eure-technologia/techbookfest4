@@ -148,6 +148,96 @@ Go言語では最新バージョンの1.10現在、複素数は以下2つの組�
 
 === ベクトル
 
+
+//list[go-vector-def][Goでベクトルの基本的な演算を実装]{
+  package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type Vector struct {
+	elements []float64
+}
+
+func NewVector(elements []float64) *Vector {
+	return &Vector{elements: elements}
+}
+
+func (v *Vector) Elements() []float64 {
+	return v.elements
+}
+
+func (v *Vector) Dimension() int {
+	return len(v.elements)
+}
+
+func (v *Vector) Norm() float64 {
+	norm := 0.0
+	for i := 0; i < v.Dimension(); i++ {
+		norm += v.elements[i] * v.elements[i]
+	}
+	return math.Sqrt(norm)
+}
+
+func Angle(v1, v2 *Vector) *float64 {
+	if !hasSameDimension(v1, v2) {
+		return nil
+	}
+	innerProduct := InnerProduct(v1, v2)
+	cosine := *innerProduct / (v1.Norm() * v2.Norm())
+	angle := math.Acos(cosine)
+	return &angle
+}
+
+func AngleInDegree(v1, v2 *Vector) *float64 {
+	if !hasSameDimension(v1, v2) {
+		return nil
+	}
+	angleInRadian := *Angle(v1, v2)
+	angleInDegree := angleInRadian * 180.0 / math.Pi
+	return &angleInDegree
+
+}
+
+func InnerProduct(v1, v2 *Vector) *float64 {
+	if !hasSameDimension(v1, v2) {
+		return nil
+	}
+	product := 0.0
+	for i := 0; i < v1.Dimension(); i++ {
+		product += v1.elements[i] * v2.elements[i]
+	}
+	return &product
+}
+
+func hasSameDimension(v1, v2 *Vector) bool {
+	if v1 == nil || v2 == nil {
+		return false
+	}
+	return v1.Dimension() == v2.Dimension()
+}
+
+func main() {
+	v1 := NewVector([]float64{1.0, 2.0})
+	v2 := NewVector([]float64{4.0, 5.0})
+
+	fmt.Println(*InnerProduct(v1, v2))
+
+	v3 := NewVector([]float64{1.0, 0.0})
+	v4 := NewVector([]float64{0.0, 1.0})
+	fmt.Println(*Angle(v3, v4))
+	fmt.Println(*AngleInDegree(v3, v4))
+	fmt.Println(*InnerProduct(v3, v4))
+
+	v5 := NewVector([]float64{math.Cos(math.Pi / 3), math.Sin(math.Pi / 3)})
+	fmt.Println(*Angle(v3, v5))
+	fmt.Println(*AngleInDegree(v3, v5))
+	fmt.Println(*InnerProduct(v3, v5))
+}
+//}
+
 === 行列
 T.B.D
 
