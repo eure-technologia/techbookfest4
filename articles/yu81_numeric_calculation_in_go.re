@@ -150,7 +150,7 @@ Go言語では最新バージョンの1.10現在、複素数は以下2つの組�
 
 
 //list[go-vector-def][Goでベクトルの基本的な演算を実装]{
-  package main
+package main
 
 import (
 	"fmt"
@@ -198,7 +198,6 @@ func AngleInDegree(v1, v2 *Vector) *float64 {
 	angleInRadian := *Angle(v1, v2)
 	angleInDegree := angleInRadian * 180.0 / math.Pi
 	return &angleInDegree
-
 }
 
 func InnerProduct(v1, v2 *Vector) *float64 {
