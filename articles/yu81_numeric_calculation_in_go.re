@@ -292,18 +292,21 @@ Go言語では最新バージョンの1.10現在、複素数は以下2つの組�
   )
 
   func CubicRoot(v float64) float64 {
-  	e := func(x float64) float64 { return x*x*x - v } // f(x) = x^3 -v = 0
+  	e := func(x float64) float64 { return x*x*x - v } // f(x) = x^3 - v = 0
   	d := func(x float64) float64 { return 3 * x * x } // f'(x) = 3x^2
   	return Newton(e, d, v)
   }
 
   func SquareRoot(v float64) float64 {
-  	e := func(x float64) float64 { return x*x - v } // f(x) = x^2 -v = 0
+  	e := func(x float64) float64 { return x*x - v } // f(x) = x^2 - v = 0
   	d := func(x float64) float64 { return 2 * x }   // f'(x) = 2x
   	return Newton(e, d, v)
   }
 
-  func Newton(equation func(x float64) float64, derivative func(x float64) float64, initial float64) float64 {
+  func Newton(
+  	equation func(x float64) float64,
+  	derivative func(x float64) float64,
+  	initial float64) float64 {
   	z := initial
   	const (
   		maxLoopCount        = 10000
