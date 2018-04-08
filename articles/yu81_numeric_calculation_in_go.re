@@ -147,94 +147,129 @@ Go言語では最新バージョンの1.10現在、複素数は以下2つの組�
 そしてそもそも、Go言語での数値計算事例はあまり存在しません。今後広範に利用されうるとすれば、機械学習でよく用いられるTensorFlowのGo言語実装で使われる可能性があるかというくらいでしょうか。
 
 === ベクトル
+ベクトルに関しても簡単に復習をしておきましょう。
+ベクトルはプログラマ的な文脈でいえば、いわゆる配列や C++の std::vector クラスのようなイメージになりますが、数学や数値計算的な文脈では少し違います。
+数学的な定義としては、@<b>{向きと大きさを持った量}、となります。
+また、全てが通常の数と同じではありませんが、加減算が成立する、実数倍することが可能（スカラー積）、加減算について結合法則と分配法則が成立する、などの性質を持ちます。数学的には群と大体同じ性質を持っています。
+数学的には上記のようなかしこまった定義となりますが、数値計算のプログラミングで用いるような場合、これらの性質
 
 
+#@# https://play.golang.org/p/G328POVxTeX
 //list[go-vector-def][Goでベクトルの基本的な演算を実装]{
-package main
+  package main
 
-import (
-	"fmt"
-	"math"
-)
+  import (
+  	"fmt"
+  	"math"
+  )
 
-type Vector struct {
-	elements []float64
-}
+  type Vector struct {
+  	elements []float64
+  }
 
-func NewVector(elements []float64) *Vector {
-	return &Vector{elements: elements}
-}
+  func NewVector(elements []float64) *Vector {
+  	return &Vector{elements: elements}
+  }
 
-func (v *Vector) Elements() []float64 {
-	return v.elements
-}
+  func (v *Vector) Elements() []float64 {
+  	return v.elements
+  }
 
-func (v *Vector) Dimension() int {
-	return len(v.elements)
-}
+  func (v *Vector) Dimension() int {
+  	return len(v.elements)
+  }
 
-func (v *Vector) Norm() float64 {
-	norm := 0.0
-	for i := 0; i < v.Dimension(); i++ {
-		norm += v.elements[i] * v.elements[i]
-	}
-	return math.Sqrt(norm)
-}
+  func (v *Vector) Norm() float64 {
+  	norm := 0.0
+  	for i := 0; i < v.Dimension(); i++ {
+  		norm += v.elements[i] * v.elements[i]
+  	}
+  	return math.Sqrt(norm)
+  }
 
-func Angle(v1, v2 *Vector) *float64 {
-	if !hasSameDimension(v1, v2) {
-		return nil
-	}
-	innerProduct := InnerProduct(v1, v2)
-	cosine := *innerProduct / (v1.Norm() * v2.Norm())
-	angle := math.Acos(cosine)
-	return &angle
-}
+  func (v *Vector) Add(v2 *Vector) *Vector {
+  	if !hasSameDimension(v, v2) {
+  		return nil
+  	}
+  	dim := v.Dimension()
+  	newVector := NewVector(make([]float64, dim))
+  	for i := 0; i < dim; i++ {
+  		newVector.elements[i] = v.elements[i] + v2.elements[i]
+  	}
+  	return newVector
+  }
 
-func AngleInDegree(v1, v2 *Vector) *float64 {
-	if !hasSameDimension(v1, v2) {
-		return nil
-	}
-	angleInRadian := *Angle(v1, v2)
-	angleInDegree := angleInRadian * 180.0 / math.Pi
-	return &angleInDegree
-}
+  func (v *Vector) Multiply(coefficient float64) *Vector {
+  	if v == nil {
+  		return nil
+  	}
+  	newElements := make([]float64, v.Dimension())
+  	copy(newElements, v.Elements())
+  	newVector := NewVector(newElements)
+  	for i := 0; i < v.Dimension(); i++ {
+  		newVector.elements[i] = coefficient * v.elements[i]
+  	}
+  	return newVector
+  }
 
-func InnerProduct(v1, v2 *Vector) *float64 {
-	if !hasSameDimension(v1, v2) {
-		return nil
-	}
-	product := 0.0
-	for i := 0; i < v1.Dimension(); i++ {
-		product += v1.elements[i] * v2.elements[i]
-	}
-	return &product
-}
+  func Angle(v1, v2 *Vector) *float64 {
+  	if !hasSameDimension(v1, v2) {
+  		return nil
+  	}
+  	innerProduct := InnerProduct(v1, v2)
+  	cosine := *innerProduct / (v1.Norm() * v2.Norm())
+  	angle := math.Acos(cosine)
+  	return &angle
+  }
 
-func hasSameDimension(v1, v2 *Vector) bool {
-	if v1 == nil || v2 == nil {
-		return false
-	}
-	return v1.Dimension() == v2.Dimension()
-}
+  func AngleInDegree(v1, v2 *Vector) *float64 {
+  	if !hasSameDimension(v1, v2) {
+  		return nil
+  	}
+  	angleInRadian := *Angle(v1, v2)
+  	angleInDegree := angleInRadian * 180.0 / math.Pi
+  	return &angleInDegree
 
-func main() {
-	v1 := NewVector([]float64{1.0, 2.0})
-	v2 := NewVector([]float64{4.0, 5.0})
+  }
 
-	fmt.Println(*InnerProduct(v1, v2))
+  func InnerProduct(v1, v2 *Vector) *float64 {
+  	if !hasSameDimension(v1, v2) {
+  		return nil
+  	}
+  	product := 0.0
+  	for i := 0; i < v1.Dimension(); i++ {
+  		product += v1.elements[i] * v2.elements[i]
+  	}
+  	return &product
+  }
 
-	v3 := NewVector([]float64{1.0, 0.0})
-	v4 := NewVector([]float64{0.0, 1.0})
-	fmt.Println(*Angle(v3, v4))
-	fmt.Println(*AngleInDegree(v3, v4))
-	fmt.Println(*InnerProduct(v3, v4))
+  func hasSameDimension(v1, v2 *Vector) bool {
+  	if v1 == nil || v2 == nil {
+  		return false
+  	}
+  	return v1.Dimension() == v2.Dimension()
+  }
 
-	v5 := NewVector([]float64{math.Cos(math.Pi / 3), math.Sin(math.Pi / 3)})
-	fmt.Println(*Angle(v3, v5))
-	fmt.Println(*AngleInDegree(v3, v5))
-	fmt.Println(*InnerProduct(v3, v5))
-}
+  func main() {
+  	v1 := NewVector([]float64{1.0, 2.0})
+  	v2 := NewVector([]float64{4.0, 5.0})
+
+  	fmt.Println(*v1.Add(v2))
+  	fmt.Println(*v1.Multiply(3.0))
+
+  	fmt.Println(*InnerProduct(v1, v2))
+
+  	v3 := NewVector([]float64{1.0, 0.0})
+  	v4 := NewVector([]float64{0.0, 1.0})
+  	fmt.Println(*Angle(v3, v4))
+  	fmt.Println(*AngleInDegree(v3, v4))
+  	fmt.Println(*InnerProduct(v3, v4))
+
+  	v5 := NewVector([]float64{math.Cos(math.Pi / 3), math.Sin(math.Pi / 3)})
+  	fmt.Println(*Angle(v3, v5))
+  	fmt.Println(*AngleInDegree(v3, v5))
+  	fmt.Println(*InnerProduct(v3, v5))
+  }
 //}
 
 === 行列
