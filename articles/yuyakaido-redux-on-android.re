@@ -278,12 +278,11 @@ store.getState()
 	.subscribe(binding.textView.text())
 //}
 
-=== リポジトリ
-
-本書で紹介したサンプルコードは次のリポジトリで公開しています。ご興味ある方は覗いてみてください。
-
- * https://github.com/yuyakaido/Relux
-
 == まとめ
 
-TODO: まとめ的なものを書く
+本書では、AndroidにおけるReduxについて紹介しました。
+
+大規模なAndroidアプリ開発においては、様々なデータソースや状態の種類のハンドリング、非同期処理の扱いが課題となることが多いですが、Reduxを適用することでこれらの課題が解決できるのではないかと思います。今回は紙面の都合で省略した部分もあるので、実際に手を動かしながら検証したい方は次のリポジトリをご覧ください。また、内容について質問したい方は私のTwitterまでメンションをいただければ可能な限り回答いたします。
+
+ * https://github.com/yuyakaido/Relux
+ * https://twitter.com/yuyakaido
