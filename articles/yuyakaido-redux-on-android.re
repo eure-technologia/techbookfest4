@@ -188,7 +188,6 @@ interface Middleware {
 具体例として、ログを出力するMiddlewareと、非同期処理を実行するMiddlewareを紹介します。
 
 //emlist[][]{
-// ログを出力するMiddleware
 class LoggerMiddleware : Middleware {
   override fun before(action: Action): Observable<Action> {
     Log.d("LoggerMiddleware", "Before dispatch: $action")
@@ -199,7 +198,7 @@ class LoggerMiddleware : Middleware {
     return Observable.just(action)
   }
 }
-// 非同期処理を実行するMiddleware
+
 class ThunkMiddleware : Middleware {
   override fun before(action: Action): Observable<Action> {
     return if (action is AsyncAction) {
