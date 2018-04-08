@@ -283,6 +283,7 @@ Go言語では最新バージョンの1.10現在、複素数は以下2つの組�
 
 === ニュートン法
 
+#@# https://play.golang.org/p/u_YzyeXyZrA
 //list[go-newton-def][Go言語におけるニュートン法の例]{
   package main
 
