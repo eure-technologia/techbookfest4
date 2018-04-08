@@ -32,9 +32,9 @@ ReduxではStoreにDispatchされたActionをもとにStateを変更しますが
 
 ReduxはFluxがベースになっており、基本的な概念は同じですが、以下のような違いがあります。
 
-* FluxではStoreの個数に制限はないが、ReduxではStoreが1個しかない
+ * FluxではStoreの個数に制限はないが、ReduxではStoreが1個しかない
 
-* Fluxでは状態変更を誰が行うのかは定められていないが、ReduxではReducerが担当する
+ * Fluxでは状態変更を誰が行うのかは定められていないが、ReduxではReducerが担当する
 
 基本的にはFluxでは曖昧に表現されていた箇所に制約を設けたものがReduxであり、根本にある考え方は同じです。
 
@@ -282,7 +282,7 @@ store.getState()
 
 本書で紹介したサンプルコードは次のリポジトリで公開しています。ご興味ある方は覗いてみてください。
 
-* https://github.com/yuyakaido/Relux
+ * https://github.com/yuyakaido/Relux
 
 == まとめ
 
