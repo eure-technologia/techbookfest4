@@ -21,18 +21,16 @@
 これからデータ基盤を作りたいんだけど、どうしようといった悩みを持っていたり、
 聞いた方もいらっしゃるのではないでしょうか。
 
-#@# [IMO] Google Cloud DataflowとCloudDataflowという書き方があるのでどちらかに統一するようがよさそう
-そんなデータラッシュの風に翻弄されている私が、最近業務で触っていたGoogle Cloud Dataflowの良さやら、
+そんなデータラッシュの風に翻弄されている私が、最近業務で触っていたCloud Dataflowの良さやら、
 コードの書き方、などなどをテーマに書いていきたいと思います。
 
 == Cloud DataFlowって?
 
-GoogleCloudPlatformが提供するストリーム/バッチ方式両方をサポートしたデータ処理用のフルマネージドサービスです。
+Googleが提供するストリーム/バッチ方式両方をサポートしたデータ処理用のフルマネージドサービスです。
 ApacheBeamを基にしたSDKが提供されており任意のinput（pubsubやmysql,gcs）から得たデータの変換、
 GCS,BigQueryへのデータ流し込みといったいわゆるETL（抽出/変換/データハウス出力）処理を
-Java,Pythonでプログラムで表現することが可能です。
-#@# [IMO] footnoteというのがRe:View記法にあるのでそれを使うのがよさそう
-（*）2018/02時点ではストリーム対応はJavaのみ
+Java@<fn>{java},Pythonなどのプログラムで表現することが可能です。
+//footnote [java][2018/02時点ではストリーム対応はJavaのみ]
 
 == どんなところがよいの?
 
@@ -45,7 +43,7 @@ CloudPubsubからのデータ入力などは実質数行で表現できますし
 国内の大規模サービス（Abema,mercari）でも採用されていたりと、事例も増えてきているのは、事例を求められがちな会社さんとしても
 安心できるところですし、料金体系的にも従量課金なので、まずはデータ基盤を作ってみるという
 データ本当に使うんかなぁ、とかいろいろ考えるとSpark Streamingを0から構築しようぜ！とか男気を見せるよりはよっぽど敷居が低くて
-SaaSであるCloudDataFlowの方がこれからデータ処理環境を構築するようなスモールスタートにも適していると思います。
+SaaSであるCloud DataFlowの方がこれからデータ処理環境を構築するようなスモールスタートにも適していると思います。
 よくある、ふわっとした無茶な要求に対しても、華麗にカウンターを決められます。
 転ばぬ先のDataFlow。
 
@@ -67,12 +65,12 @@ CloudIoTCoreやCloudEndPoint等と組み合わせることで,次の図のよう
 
 === 前準備
 
-はじめにCloudDataFlowAPIの有効化をコンソールから行ってください。
-次にCloudDataFlowの動作には以下が必要となりますので、
+はじめにCloud DataFlowAPIの有効化をコンソールから行ってください。
+次にCloud DataFlowの動作には以下が必要となりますので、
 GCS（GoogleCloudStorage）に任意の名前でBucketを作成してください。
 
- * CloudDataFlowが内部的に利用するstaging用のgcsBucketの作成
- * CloudDataFlowが内部的に利用するtemp用のgcsBucketの作成
+ * Cloud DataFlowが内部的に利用するstaging用のgcsBucketの作成
+ * Cloud DataFlowが内部的に利用するtemp用のgcsBucketの作成
 
 GCPのアカウントやプロジェクトの設定については準備できていることを前提としています。
 
@@ -88,7 +86,7 @@ pom.xmlに以下を記載してSDKをプロジェクトにダウンロードし�
 </dependency>
 //}
 
-eclipseの場合はpluginからCloudDataFlow用のPluginなども用意されていますが、
+eclipseの場合はpluginからCloud DataFlow用のPluginなども用意されていますが、
 この辺はIDEの好みで。
 
 === 動作の設定についてのコードを書く
@@ -387,7 +385,7 @@ DataflowJobを実行中にExceptionが発生した場合、PubSubにACKを送ら
 == まとめ
 
 さて、まだまだ色々と説明できていない部分もありますが、ちょっとしたサンプルを基に
-今回CloudDataFlowの使い方や良さについて語ってみました。
+今回Cloud DataFlowの使い方や良さについて語ってみました。
 
 GCP内の連携と大雑把な流れを説明したかったので、やや本来の持ち味である
 複数のinputをひとつのoutputに加工したり、複数のアウトプットに分岐したり
