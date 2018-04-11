@@ -100,25 +100,25 @@ GraphQLを用いて読み込みを行う場合は、Queryという構文を使�
 package main
 
 import (
-	"github.com/graphql-go/graphql"
+  "github.com/graphql-go/graphql"
 )
 
 var q graphql.ObjectConfig = graphql.ObjectConfig{
-	Name: "query",
-	Fields: graphql.Fields{
-		"id": &graphql.Field{
-			Type:    graphql.ID,
-			Resolve: resolveID,
-		},
-		"name": &graphql.Field{
-			Type:    graphql.String,
-			Resolve: resolveName,
-		},
-	},
+  Name: "query",
+  Fields: graphql.Fields{
+    "id": &graphql.Field{
+      Type:    graphql.ID,
+      Resolve: resolveID,
+    },
+    "name": &graphql.Field{
+      Type:    graphql.String,
+      Resolve: resolveName,
+    },
+  },
 }
 
 var schemaConfig graphql.SchemaConfig = graphql.SchemaConfig{
-	Query: graphql.NewObject（q）,
+  Query: graphql.NewObject（q）,
 }
 
 var schema, _ = graphql.NewSchema（schemaConfig）
@@ -132,69 +132,69 @@ var schema, _ = graphql.NewSchema（schemaConfig）
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"net/http"
+  "bytes"
+  "encoding/json"
+  "fmt"
+  "net/http"
 
-	"github.com/graphql-go/graphql"
+  "github.com/graphql-go/graphql"
 )
 
 var q graphql.ObjectConfig = graphql.ObjectConfig{
-	Name: "query",
-	Fields: graphql.Fields{
-		"id": &graphql.Field{
-			Type:    graphql.ID,
-			Resolve: resolveID,
-		},
-		"name": &graphql.Field{
-			Type:    graphql.String,
-			Resolve: resolveName,
-		},
-	},
+  Name: "query",
+  Fields: graphql.Fields{
+    "id": &graphql.Field{
+      Type:    graphql.ID,
+      Resolve: resolveID,
+    },
+    "name": &graphql.Field{
+      Type:    graphql.String,
+      Resolve: resolveName,
+    },
+  },
 }
 
 var schemaConfig graphql.SchemaConfig = graphql.SchemaConfig{
-	Query: graphql.NewObject（q）,
+  Query: graphql.NewObject（q）,
 }
 var schema, _ = graphql.NewSchema（schemaConfig）
 
 func executeQuery（query string, schema graphql.Schema） *graphql.Result {
-	r := graphql.Do(graphql.Params{
-		Schema:        schema,
-		RequestString: query,
-	})
+  r := graphql.Do(graphql.Params{
+    Schema:        schema,
+    RequestString: query,
+  })
 
-	if len（r.Errors） > 0 {
-		fmt.Printf（"エラーがあるよ: %v", r.Errors）
-	}
+  if len（r.Errors） > 0 {
+    fmt.Printf（"エラーがあるよ: %v", r.Errors）
+  }
 
-	j, _ := json.Marshal（r）
-	fmt.Printf（"%s \n", j）
+  j, _ := json.Marshal（r）
+  fmt.Printf（"%s \n", j）
 
-	return r
+  return r
 }
 
 func handler（w http.ResponseWriter, r *http.Request） {
-	bufBody := new（bytes.Buffer）
-	bufBody.ReadFrom（r.Body）
-	query := bufBody.String()
+  bufBody := new（bytes.Buffer）
+  bufBody.ReadFrom（r.Body）
+  query := bufBody.String()
 
-	result := executeQuery（query, schema）
-	json.NewEncoder（w）.Encode（result）
+  result := executeQuery（query, schema）
+  json.NewEncoder（w）.Encode（result）
 }
 
 func main() {
-	http.HandleFunc（"/", handler）
-	http.ListenAndServe（":8080", nil）
+  http.HandleFunc（"/", handler）
+  http.ListenAndServe（":8080", nil）
 }
 
 func resolveID（p graphql.ResolveParams） （interface{}, error） {
-	return 1, nil
+  return 1, nil
 }
 
 func resolveName（p graphql.ResolveParams） （interface{}, error） {
-	return "hoge", nil
+  return "hoge", nil
 }
 //}
 
@@ -221,8 +221,8 @@ curl -X POST -d '{ id, name }' http://localhost:8080/
 
 //emlist[][]{
 "id": &graphql.Field{
-	Type:    graphql.ID,
-	Resolve: resolveID,
+  Type:    graphql.ID,
+  Resolve: resolveID,
 },
 //}
 
@@ -232,19 +232,19 @@ Queryに引数を渡すこともできますので、試してみましょう。
 
 //emlist[][]{
 "id": &graphql.Field{
-	"id": &graphql.Field{
-		Type: graphql.ID,
-		Args: graphql.FieldConfigArgument{
-			"id": &graphql.ArgumentConfig{
-				Type: graphql.Int,
-			},
-		},
-		Resolve: resolveID,
-	},
+  "id": &graphql.Field{
+    Type: graphql.ID,
+    Args: graphql.FieldConfigArgument{
+      "id": &graphql.ArgumentConfig{
+        Type: graphql.Int,
+      },
+    },
+    Resolve: resolveID,
+  },
 }
 
 func resolveID（p graphql.ResolveParams） （interface{}, error） {
-	return p.Args["id"], nil
+  return p.Args["id"], nil
 }
 //}
 
@@ -269,62 +269,62 @@ GraphQLでは、読み込み時はQueryを使用していましたが、書き�
 
 //emlist[][]{
 var m graphql.ObjectConfig = graphql.ObjectConfig{
-	Name: "User",
-	Fields: graphql.Fields{
-		"user": &graphql.Field{
-			Type: graphql.NewObject(graphql.ObjectConfig{
-				Name: "Params",
-				Fields: graphql.Fields{
-					"id": &graphql.Field{
-						Type: graphql.Int,
-					},
-					"address": &graphql.Field{
-						Type: graphql.NewObject(graphql.ObjectConfig{
-							Name: "state",
-							Fields: graphql.Fields{
-								"state": &graphql.Field{
-									Type: graphql.String,
-								},
-								"city": &graphql.Field{
-									Type: graphql.String,
-								},
-							},
-						}),
-					},
-				},
-			}),
-			Args: graphql.FieldConfigArgument{
-				"id": &graphql.ArgumentConfig{
-					Type: graphql.Int,
-				},
-			},
-			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				// ここで更新処理をする
-				return User{
-					Id: 10000,
-					Address: Address{
-						State: "三宿",
-						City:  "世田谷区",
-					},
-				}, nil
-			},
-		},
-	},
+  Name: "User",
+  Fields: graphql.Fields{
+    "user": &graphql.Field{
+      Type: graphql.NewObject(graphql.ObjectConfig{
+        Name: "Params",
+        Fields: graphql.Fields{
+          "id": &graphql.Field{
+            Type: graphql.Int,
+          },
+          "address": &graphql.Field{
+            Type: graphql.NewObject(graphql.ObjectConfig{
+              Name: "state",
+              Fields: graphql.Fields{
+                "state": &graphql.Field{
+                  Type: graphql.String,
+                },
+                "city": &graphql.Field{
+                  Type: graphql.String,
+                },
+              },
+            }),
+          },
+        },
+      }),
+      Args: graphql.FieldConfigArgument{
+        "id": &graphql.ArgumentConfig{
+          Type: graphql.Int,
+        },
+      },
+      Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+        // ここで更新処理をする
+        return User{
+          Id: 10000,
+          Address: Address{
+            State: "三宿",
+            City:  "世田谷区",
+          },
+        }, nil
+      },
+    },
+  },
 }
 
 type User struct {
-	Id      int64 `json:"id"`
-	Address Address `json:"address"`
+  Id      int64 `json:"id"`
+  Address Address `json:"address"`
 }
 
 type Address struct {
-	State string `json:"state"`
-	City  string `json:"city"`
+  State string `json:"state"`
+  City  string `json:"city"`
 }
 
 var schemaConfig graphql.SchemaConfig = graphql.SchemaConfig{
-	Query:    graphql.NewObject(q),
-	Mutation: graphql.NewObject(m),
+  Query:    graphql.NewObject(q),
+  Mutation: graphql.NewObject(m),
 }
 //}
 
