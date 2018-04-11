@@ -581,11 +581,9 @@ Helloworkd.vueを次のように修正してみましょう
 
 画像のように、Assetsの更新、作成を行える画面が表示されました。
 
-
 == 次のステップ
-
-Hyperledgerのリポジトリにsample-networks（https://github.com/hyperledger/composer-sample-networks）というのがあります。
-Composerで実装されたいくつかのサンプルをみることができます。
+ギットハブのリポジトリにはサンプル集(https://github.com/hyperledger/composer-sample-networks)があります。
+ここではComposerで実装されたいくつかのサンプルをみることができます。
 
 今回、ブロックチェーンにチェーンコードをデプロイし、APIを介して利用するという一連の流れを行いました。
 これを参考に自分なりのアプリケーションを作ってみるのも面白いですね。
