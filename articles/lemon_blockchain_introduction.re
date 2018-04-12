@@ -185,7 +185,8 @@ npm install -g composer-playground
 Composerのデプロイ先であるブロックチェーン環境の構築も行います
 //cmd{
   mkdir ~/fabric-tools && cd ~/fabric-tools
-  curl -O https://raw.githubusercontent.com/hyperledger/composer-tools/master/packages/fabric-dev-servers/fabric-dev-servers.zip
+  curl -O https://raw.githubusercontent.com/hyperledger/composer-tools/master/
+          packages/fabric-dev-servers/fabric-dev-servers.zip
   unzip fabric-dev-servers.zip
 //}
 FABRICの環境が解凍されるので、
