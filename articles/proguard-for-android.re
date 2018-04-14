@@ -63,7 +63,8 @@ SomeClass.class.getDeclaredMethod("someMethod", new Class[] { A.class })
 SomeClass.class.getDeclaredMethod("someMethod", new Class[] { A.class, B.class })
 AtomicIntegerFieldUpdater.newUpdater(SomeClass.class, "someField")
 AtomicLongFieldUpdater.newUpdater(SomeClass.class, "someField")
-AtomicReferenceFieldUpdater.newUpdater(SomeClass.class, SomeType.class, "someField")
+AtomicReferenceFieldUpdater
+            .newUpdater(SomeClass.class, SomeType.class, "someField")
 //}
 
 == Androidアプリ開発におけるProGuardを理解する

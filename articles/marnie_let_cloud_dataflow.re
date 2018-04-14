@@ -194,15 +194,17 @@ mvn compile exec:java \
   // pubsubからの入力に対する変換を設定 （実装は後述）
     .apply(ParDo.of(new BigQueryRowConverter()))
   // BigQueryへの書き込みを設定
-     .apply("WriteToBQ", BigQueryIO.writeTableRows()
-       // 書き込み先テーブル名を指定
-       .to(TableDestination("dataset_name:table_name","description"))
-       // 書き込み先のschemaをObjectで定義して渡す
-       .withSchema(schema)
-       // テーブルがなければ作成する（オプション）
-       .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
-       // テーブル末尾にデータを挿入していく（オプション)
-       .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND));
+    .apply("WriteToBQ", BigQueryIO.writeTableRows()
+      // 書き込み先テーブル名を指定
+      .to(TableDestination("dataset_name:table_name","description"))
+      // 書き込み先のschemaをObjectで定義して渡す
+      .withSchema(schema)
+      // テーブルがなければ作成する（オプション）
+      .withCreateDisposition(
+           BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
+      // テーブル末尾にデータを挿入していく（オプション)
+      .withWriteDisposition(
+           BigQueryIO.Write.WriteDisposition.WRITE_APPEND));
   // 実行
   p.run();
 
@@ -263,12 +265,12 @@ public class SampleSchemaFactory {
         {
           add(new TableFieldSchema().setName("attr1").setType("STRING"));
           add(new TableFieldSchema().setName("attr2").setType("RECORD")
-            .setFields(new ArrayList<TableFieldSchema>() {
-              {
-                add(new TableFieldSchema().setName("prop1").setType("INTEGER"));
-                add(new TableFieldSchema().setName("prop2").setType("STRING"));
-              }
-            })
+           .setFields(new ArrayList<TableFieldSchema>() {
+            {
+             add(new TableFieldSchema().setName("prop1").setType("INTEGER"));
+             add(new TableFieldSchema().setName("prop2").setType("STRING"));
+            }
+           })
           );
         }
       })

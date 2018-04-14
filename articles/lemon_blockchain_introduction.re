@@ -97,21 +97,21 @@ Hyperledger FabricとHyperledger Composerの両方を構築し、簡単にプレ
 Composerの使用には、nodeが必要です。バージョンを指定できるよう、Node Version Managerをインストールしておきましょう。
 
 //cmd{
-  curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
 //}
 
 この際、GitがはじめてであればXcode Command Line Toolのインストールが求められることがあります。
 Xcodeをインストールしたことがあれば入っていると思いますが、求められる場合はInstallという選択をタップして先に進めてください。
 
 //cmd{
-  touch .bash_profile
+touch .bash_profile
 //}
 
 上記のコマンドを $HOME( = Users/username/）で実行し、PATHの設定ファイルを作成します。
 
 その後、
 //cmd{
-  curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
 //}
 
 を実行してください。NVMのインストールが始まります。インストールが終了したら、ターミナルを開き直してください。
@@ -121,14 +121,14 @@ Nodeの環境は、特定のバージョンでしか実行できないパッケ�
 Nvmが入ったら、次のコマンドを叩いてnodeをインストールしましょう。
 
 //cmd{
-  nvm install --lts
+nvm install --lts
 //}
 
 NodeのLTSバージョン（Long Term Supportバージョン）を入れておきましょう。安定しています。
 2018/03時点では、LTSは8.10.0です。
 
 //cmd{
-  nvm use --lts
+nvm use --lts
 //}
 
 インストール後、上のコマンドを叩いてnvmに紐づくNodeを指定します。
@@ -315,12 +315,16 @@ Composerによってアーカイブファイル（.bna）が作成されます�
 次に、作成されたビジネスネットワークカードをどのユーザー権限でFabricにデプロイできるようにするかを設定してinstall処理を行います。
 最初に作成したユーザーを使ってこのアーカイブされたファイルをいれましょう
 //cmd{
- composer runtime install --card PeerAdmin@hlfv1 --businessNetworkName my_first_business_network
+composer runtime install --card PeerAdmin@hlfv1 \
+      --businessNetworkName my_first_business_network
 //}
 
 インストールしたら、起動させましょう。
 //cmd{
-composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile my_first_business_network@0.0.1.bna --file networkadmin.card
+composer network start --card PeerAdmin@hlfv1 \
+     --networkAdmin admin --networkAdminEnrollSecret \
+     adminpw --archiveFile my_first_business_network@0.0.1.bna \
+     --file networkadmin.card
 //}
 
 ちなみに実際にnetwork（アプリ）が立ち上がってるかはコマンドを打つことで確認できます
@@ -388,11 +392,16 @@ APIにネームスペースを使用するかと聞かれるとNo,
 WebSocketによるイベント発行はYes,
 Rest APIにTLSをいれるかはNoで答えます。
 //cmd{
-? Enter the name of the business network card to use: admin@my_first_business_network
-? Specify if you want namespaces in the generated REST API: never use namespaces
-? Specify if you want to enable authentication for the REST API using Passport: No
-? Specify if you want to enable event publication over WebSockets: Yes
-? Specify if you want to enable TLS security for the REST API: No
+? Enter the name of the business network card to use: \
+       admin@my_first_business_network
+? Specify if you want namespaces in the generated REST API: \
+       never use namespaces
+? Specify if you want to enable \
+       authentication for the REST API using Passport: No
+? Specify if you want to enable \
+       event publication over WebSockets: Yes
+? Specify if you want to enable \
+       TLS security for the REST API: No
 //}
 
 そうするとlocalhost:XXXX/ explorerというアドレスが発行される（ログででる）のでそちらを開いてみてください。
@@ -432,7 +441,8 @@ vue init webpack composer-app
 ? Use ESLint to lint your code? No
 ? Set up unit tests No
 ? Setup e2e tests with Nightwatch? No
-? Should we run `npm install` for you after the project has been created? (recommended) npm
+? Should we run `npm install` \
+   for you after the project has been created? (recommended) npm
 
 cd composer-app
 npm run dev

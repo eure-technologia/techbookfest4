@@ -155,7 +155,7 @@ pageWrapper body = div [ class "main-wrapper"
 
 このコードは少し長いですが、HTMLとCSSの要素と、そのViewに挿入するModelの中の値をひとまとめに書くことができることがわかります。
 
-これらはelm-html（https://github.com/elm-lang/html）とelm-css（https://github.com/rtfeldman/elm-css）というライブラリを用いる形で記述しています。
+これらはelm-html(https://github.com/elm-lang/html)とelm-css(https://github.com/rtfeldman/elm-css)というライブラリを用いる形で記述しています。
 
 @<tt>{div}や@<tt>{img}を始めとしたHTMLの要素を関数として、その属性や子要素を引数として記述していますが、通常のHTMLと同じように読むことも可能な見た目になっているため簡単に記述できます。
 また、@<tt>{pageWrapper}のように引数に他のViewを取ってViewを組み立てるということも可能です。
@@ -164,7 +164,7 @@ pageWrapper body = div [ class "main-wrapper"
 このようにしてModelとView、Updateを定義することによってThe Elm Architectureのアプリケーションを記述することができました。あとは前述のライブラリが提供している@<tt>{Html.program}にこれらの処理と初期状態のモデル等をわたし、それをmain関数とすることによって実際にアプリケーションが動くようになります。
 
 == おわりに
-この記事では、Elmアプリケーションの流れをひととおり追ってみました。この記事でElmに興味を持った方へは、詳しい情報を得るために公式サイト（http://elm-lang.org/）のサンプルコードを読んでみることをお勧めします。
+この記事では、Elmアプリケーションの流れをひととおり追ってみました。この記事でElmに興味を持った方へは、詳しい情報を得るために公式サイト(http://elm-lang.org/)のサンプルコードを読んでみることをお勧めします。
 
 
 Elmはelm-reactorやオンラインエディタ等、試しに使ってみる時へのサポートもしっかりしているのでまずは試しに触ってみるというのもお勧めです！

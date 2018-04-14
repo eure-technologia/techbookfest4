@@ -243,37 +243,38 @@ ItemDecorationで適宜マージンの調整を行なっています。
 これは、Sectionの中のupdate関数を追っていくとよく分かります。公式のコードは次のとおりです。
 
 //emlist[][]{
-  final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
-          @Override
-          public int getOldListSize() {
-              return oldBodyItemCount;
-          }
+  final DiffUtil.DiffResult diffResult =
+    DiffUtil.calculateDiff(new DiffUtil.Callback() {
+      @Override
+      public int getOldListSize() {
+        return oldBodyItemCount;
+      }
 
-          @Override
-          public int getNewListSize() {
-              return newBodyItemCount;
-          }
+      @Override
+      public int getNewListSize() {
+        return newBodyItemCount;
+      }
 
-          @Override
-          public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-              Item oldItem = getItem(oldBodyGroups, oldItemPosition);
-              Item newItem = getItem(newBodyGroups, newItemPosition);
-              return newItem.isSameAs(oldItem);
-          }
+      @Override
+      public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+        Item oldItem = getItem(oldBodyGroups, oldItemPosition);
+        Item newItem = getItem(newBodyGroups, newItemPosition);
+        return newItem.isSameAs(oldItem);
+      }
 
-          @Override
-          public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-              Item oldItem = getItem(oldBodyGroups, oldItemPosition);
-              Item newItem = getItem(newBodyGroups, newItemPosition);
-              return newItem.equals(oldItem);
-          }
+      @Override
+      public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+        Item oldItem = getItem(oldBodyGroups, oldItemPosition);
+        Item newItem = getItem(newBodyGroups, newItemPosition);
+        return newItem.equals(oldItem);
+      }
 
       @Nullable
       @Override
       public Object getChangePayload(int oldItemPosition, int newItemPosition) {
-          Item oldItem = getItem(oldBodyGroups, oldItemPosition);
-          Item newItem = getItem(newBodyGroups, newItemPosition);
-          return oldItem.getChangePayload(newItem);
+        Item oldItem = getItem(oldBodyGroups, oldItemPosition);
+        Item newItem = getItem(newBodyGroups, newItemPosition);
+        return oldItem.getChangePayload(newItem);
       }
   });
 
@@ -293,26 +294,26 @@ Group毎にItemとその中身のContentの差分を計算してDiffUtilクラ�
 
 //emlist[][]{
   private ListUpdateCallback listUpdateCallback = new ListUpdateCallback() {
-      @Override
-      public void onInserted(int position, int count) {
-          notifyItemRangeInserted(getHeaderItemCount() + position, count);
-      }
+    @Override
+    public void onInserted(int position, int count) {
+      notifyItemRangeInserted(getHeaderItemCount() + position, count);
+    }
 
-      @Override
-      public void onRemoved(int position, int count) {
-          notifyItemRangeRemoved(getHeaderItemCount() + position, count);
-      }
+    @Override
+    public void onRemoved(int position, int count) {
+      notifyItemRangeRemoved(getHeaderItemCount() + position, count);
+    }
 
-      @Override
-      public void onMoved(int fromPosition, int toPosition) {
-          final int headerItemCount = getHeaderItemCount();
-          notifyItemMoved(headerItemCount + fromPosition, headerItemCount + toPosition);
-      }
+    @Override
+    public void onMoved(int fromPosition, int toPosition) {
+      final int headerItemCount = getHeaderItemCount();
+      notifyItemMoved(headerItemCount + fromPosition, headerItemCount + toPosition);
+    }
 
-      @Override
-      public void onChanged(int position, int count, Object payload) {
-          notifyItemRangeChanged(getHeaderItemCount() + position, count, payload);
-      }
+    @Override
+    public void onChanged(int position, int count, Object payload) {
+      notifyItemRangeChanged(getHeaderItemCount() + position, count, payload);
+    }
   };
 //}
 

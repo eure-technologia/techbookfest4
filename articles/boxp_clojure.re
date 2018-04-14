@@ -344,7 +344,7 @@ user=> (->> (map #(+ 2 %) [1 2 4 5 8])
 
 REPLを使った効率的な開発が可能な他、ボイラープレートがherokuへのデプロイに必要な設定ファイルや静的ウェブページを返すエンドポイントを自動生成してくれる等など大変充実しています。
 
-開発を始めるのなら、ぜひQuickStart（https://github.com/duct-framework/duct#quick-start）を参考に始めるといいでしょう。
+開発を始めるのなら、ぜひQuickStart(https://github.com/duct-framework/duct#quick-start)を参考に始めるといいでしょう。
 
 === フロントエンドアプリケーションを作るフレームワーク「re-frame」
 
